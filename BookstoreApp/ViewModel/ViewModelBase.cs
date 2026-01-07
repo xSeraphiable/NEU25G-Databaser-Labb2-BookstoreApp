@@ -12,7 +12,7 @@ namespace BookstoreApp.ViewModel
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public void RaiseProperyChanged([CallerMemberName] string? propertyName = null)
+        public void RaisePropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+<<<<<<< HEAD
+=======
+    <Folder Include="Data\Model\" />
+  </ItemGroup>
+
+  <ItemGroup>
+>>>>>>> 27518d3187e2664f353c291b9c796807057f0b9f
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.11" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.11" />
   </ItemGroup>

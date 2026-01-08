@@ -12,15 +12,18 @@ namespace BookstoreApp.ViewModel
     {
         public ObservableCollection<Store> Stores { get; set; }
 
-        private string _selectedStore;
+        private Store _selectedStore;
 
-        public string SelectedStore
+        public Store SelectedStore
         {
             get => _selectedStore;
             set
             {
                 _selectedStore = value;
+                StockLevelViewModel.LoadStockLevel();
                 RaisePropertyChanged();
+                RaisePropertyChanged("StockLevel");
+             
             }
         }
 
@@ -50,10 +53,7 @@ namespace BookstoreApp.ViewModel
 
             Stores = new ObservableCollection<Store>(
            db.Stores.ToList());
-
-            //Stores = new ObservableCollection<string>(
-            //    db.Stores.Select(o => o.Street).ToList()
-            //    );
+     
         }
 
     }

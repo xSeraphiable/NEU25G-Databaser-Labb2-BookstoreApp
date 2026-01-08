@@ -10,7 +10,8 @@
     <!--Placeholder meny. Gör om med commands/bindings och korrekt innehåll.-->
     <Menu>
         <MenuItem Header="Start">
-            <MenuItem Header="Välj butik" ItemsSource="{Binding Stores}" DisplayMemberPath="Street"/>
+            <MenuItem Header="Byt butik..."/>
+            <!-- lägg till Command="{Binding ShowLoginCommand}" -->
             <MenuItem Header="Avsluta"/>
         </MenuItem>
         <MenuItem Header="Register">

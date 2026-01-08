@@ -1,4 +1,5 @@
 ﻿using BookstoreApp.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,20 +11,16 @@ namespace BookstoreApp.ViewModel
 {
     internal class MainWindowViewModel : ViewModelBase
     {
-        public ObservableCollection<Store> Stores { get; set; }
+        public ObservableCollection<Store> Stores { get; } = new();
 
-        private Store _selectedStore;
-
-        public Store SelectedStore
+        private Store? _selectedStore;
+        public Store? SelectedStore
         {
             get => _selectedStore;
             set
             {
                 _selectedStore = value;
-                StockLevelViewModel.LoadStockLevel();
                 RaisePropertyChanged();
-                RaisePropertyChanged("StockLevel");
-             
             }
         }
 
@@ -44,16 +41,19 @@ namespace BookstoreApp.ViewModel
         public MainWindowViewModel()
         {
             StockLevelViewModel = new StockLevelViewModel(this);
-            CurrentView = StockLevelViewModel; 
-            LoadStores(); //TODO: ändra till asynkront
+            CurrentView = StockLevelViewModel;
+
+            _ = LoadStoresAsync();
         }
-        private void LoadStores()
+        private async Task LoadStoresAsync()
         {
             using var db = new BookstoreContext();
 
-            Stores = new ObservableCollection<Store>(
-           db.Stores.ToList());
-     
+            var stores = await db.Stores.ToListAsync();
+
+            Stores.Clear();
+            foreach (var s in stores)
+                Stores.Add(s);
         }
 
     }

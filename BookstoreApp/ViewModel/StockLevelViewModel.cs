@@ -15,31 +15,29 @@ namespace BookstoreApp.ViewModel
     {
         private readonly MainWindowViewModel? _mainWindowViewModel;
 
-        public StockLevelViewModel(MainWindowViewModel? mainWindowViewModel)
+        public StockLevelViewModel(MainWindowViewModel mainWindowViewModel)
         {
             _mainWindowViewModel = mainWindowViewModel;
-            LoadStockLevel();
+            StockLevel = new ObservableCollection<StockLevelOverview>();
         }
 
         public ObservableCollection<Store> Stores => _mainWindowViewModel.Stores;
 
-        public Store SelectedStore
+        public Store? SelectedStore
         {
             get => _mainWindowViewModel.SelectedStore;
             set
             {
                 _mainWindowViewModel.SelectedStore = value;
                 RaisePropertyChanged();
-                LoadStockLevel();
+                _ = LoadStockLevelAsync();
             }
         }
 
         public ObservableCollection<StockLevelOverview> StockLevel { get; set; }
 
-        public void LoadStockLevel()
+        public async Task LoadStockLevelAsync()
         {
-            
-            // 0) Om ingen butik är vald -> visa tom tabell
             if (SelectedStore is null)
             {
                 StockLevel ??= new ObservableCollection<StockLevelOverview>();
@@ -51,8 +49,7 @@ namespace BookstoreApp.ViewModel
 
             using var db = new BookstoreContext();
 
-            // 1) Hämta rådata (SQL-vänligt)
-            var raw = db.StockLevels
+            var raw = await db.StockLevels
                 .Where(sl => sl.StoreId == storeId)
                 .Select(sl => new
                 {
@@ -63,9 +60,8 @@ namespace BookstoreApp.ViewModel
                     sl.QuantityOrdered,
                     SalesPrice = sl.IsbnNavigation.SalesPrice
                 })
-                .ToList();
+                .ToListAsync();
 
-            // 2) Bygg tabellrader i C# (string.Join här)
             var items = raw.Select(x => new StockLevelOverview
             {
                 Isbn = x.Isbn,
@@ -76,26 +72,10 @@ namespace BookstoreApp.ViewModel
                 SalesPrice = x.SalesPrice
             }).ToList();
 
-            // 3) Uppdatera ObservableCollection (UI uppdateras)
             StockLevel ??= new ObservableCollection<StockLevelOverview>();
             StockLevel.Clear();
             foreach (var item in items)
                 StockLevel.Add(item);
-
-            //StockLevel = new ObservableCollection<StockLevelOverview>(
-            //    db.StockLevels
-            //    .Where(s => s.Store.Street == SelectedStore.Street)
-            //    .Select(s => new StockLevelOverview()
-            //    {
-            //        Isbn = s.Isbn,
-            //        Title = s.IsbnNavigation.Title,
-            //        Author = string.Join(", ", s.IsbnNavigation.Authors
-            //                       .Select(a => $"{a.FirstName} {a.Surname}")),
-            //        Quantity = s.Quantity,
-            //        QuantityOrdered = s.QuantityOrdered,
-            //        SalesPrice = s.IsbnNavigation.SalesPrice
-
-            //    }).ToList());
         }
     }
 }

@@ -16,8 +16,8 @@
            Margin="10"
            VerticalAlignment="Center"
            ItemsSource="{Binding Stores}" DisplayMemberPath="Street"
-           SelectedItem="{Binding SelectedStore}" 
-           IsReadOnly="True" />
+           SelectedItem="{Binding SelectedStore, UpdateSourceTrigger=PropertyChanged}" 
+           />
         </StackPanel>
         <DataGrid Grid.Row="1"
                   AutoGenerateColumns="False"

@@ -11,18 +11,17 @@
             <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <ComboBox Width="200"
-           Margin="10"
-           VerticalAlignment="Center"
-           ItemsSource="{Binding Stores}" DisplayMemberPath="Street"
-           SelectedItem="{Binding SelectedStore, UpdateSourceTrigger=PropertyChanged}" 
-           />
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="8 8 0 0">
+            <TextBlock Text="Vald butik: " Margin="2" FontWeight="Bold"/>
+            <TextBlock Text="{Binding SelectedStore.StoreId, UpdateSourceTrigger=PropertyChanged}" Margin="2"/>
+            <TextBlock Text=" "/>
+            <TextBlock Text="{Binding SelectedStore.Street, UpdateSourceTrigger=PropertyChanged}" Margin="2"/>    
         </StackPanel>
         <DataGrid Grid.Row="1"
                   AutoGenerateColumns="False"
                   ItemsSource="{Binding StockLevel}"
-                  AlternatingRowBackground="PaleTurquoise">
+                  AlternatingRowBackground="PaleTurquoise"
+                  Margin="10 0 10 10">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ISBN" Binding="{Binding Isbn}"/>
                 <DataGridTextColumn Header="Titel" Binding="{Binding Title}"/>

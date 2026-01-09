@@ -19,6 +19,15 @@ namespace BookstoreApp.ViewModel
         {
             _mainWindowViewModel = mainWindowViewModel;
             StockLevel = new ObservableCollection<StockLevelOverview>();
+
+            _mainWindowViewModel.PropertyChanged += async (_, e) =>
+            {
+                if (e.PropertyName == nameof(MainWindowViewModel.SelectedStore))
+                {
+                    RaisePropertyChanged(nameof(SelectedStore));
+                    await LoadStockLevelAsync();
+                }
+            };
         }
 
         public ObservableCollection<Store> Stores => _mainWindowViewModel.Stores;
@@ -26,12 +35,12 @@ namespace BookstoreApp.ViewModel
         public Store? SelectedStore
         {
             get => _mainWindowViewModel.SelectedStore;
-            set
-            {
-                _mainWindowViewModel.SelectedStore = value;
-                RaisePropertyChanged();
-                _ = LoadStockLevelAsync();
-            }
+            //set
+            //{
+            //    _mainWindowViewModel.SelectedStore = value;
+            //    RaisePropertyChanged();
+            //    _ = LoadStockLevelAsync();
+            //}
         }
 
         public ObservableCollection<StockLevelOverview> StockLevel { get; set; }
@@ -44,6 +53,10 @@ namespace BookstoreApp.ViewModel
                 StockLevel.Clear();
                 return;
             }
+
+            //var store = _mainWindowViewModel.SelectedStore;
+            //if (store is null) { StockLevel.Clear(); return; }
+            //var storeId = store.StoreId;
 
             var storeId = SelectedStore.StoreId;
 

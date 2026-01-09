@@ -10,8 +10,21 @@
     <!--Placeholder meny. Gör om med commands/bindings och korrekt innehåll.-->
     <Menu>
         <MenuItem Header="Start">
-            <MenuItem Header="Byt butik..."/>
-            <!-- lägg till Command="{Binding ShowLoginCommand}" -->
+            <MenuItem Header="Byt butik"
+                      ItemsSource="{Binding Stores}">
+                <MenuItem.ItemContainerStyle>
+                    <Style TargetType="MenuItem">
+                        <Setter Property="Header" 
+                                Value="{Binding Street}" />
+                        <Setter Property="Command"
+                                Value="{Binding DataContext.SelectStoreCommand,
+                                                RelativeSource={RelativeSource AncestorType=Menu}}" />
+                        <Setter Property="CommandParameter" Value="{Binding}" />
+                    </Style>
+                </MenuItem.ItemContainerStyle>
+
+            </MenuItem>
+            <!-- lägg ev till Command="{Binding ShowLoginCommand}" -->
             <MenuItem Header="Avsluta"/>
         </MenuItem>
         <MenuItem Header="Register">

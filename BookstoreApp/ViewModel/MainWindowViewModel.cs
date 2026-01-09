@@ -1,4 +1,5 @@
-﻿using BookstoreApp.Infrastructure;
+﻿using BookstoreApp.Commands;
+using BookstoreApp.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,20 @@ namespace BookstoreApp.ViewModel
     internal class MainWindowViewModel : ViewModelBase
     {
         public ObservableCollection<Store> Stores { get; } = new();
+        public DelegateCommand SelectStoreCommand { get; }
+
+        public bool CanSelectPack(object? args)
+        {
+            return args is Store;
+        }
+
+        public void SelectPack(object? args)
+        {
+            if (args is Store store)
+            {
+                SelectedStore = store;
+            }
+        }
 
         private Store? _selectedStore;
         public Store? SelectedStore
@@ -42,8 +57,9 @@ namespace BookstoreApp.ViewModel
         {
             StockLevelViewModel = new StockLevelViewModel(this);
             CurrentView = StockLevelViewModel;
-
             _ = LoadStoresAsync();
+
+            SelectStoreCommand = new DelegateCommand(SelectPack, CanSelectPack);
         }
         private async Task LoadStoresAsync()
         {

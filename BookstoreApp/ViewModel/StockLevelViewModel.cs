@@ -1,5 +1,5 @@
-﻿using BookstoreApp.Infrastructure;
-using BookstoreApp.Models;
+﻿using BookstoreApp.Commands;
+using BookstoreApp.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -15,10 +15,56 @@ namespace BookstoreApp.ViewModel
     {
         private readonly MainWindowViewModel? _mainWindowViewModel;
 
+        public DelegateCommand SaveStockLevelCommand { get; }
+        public DelegateCommand CancelChangesCommand { get; }
+
+
+        public async void SaveStock(object? args)
+        {
+            if (SelectedStore is null)
+                return;
+
+            var modifiedRows = StockLevel.Where(r => r.IsModified).ToList();
+            if (!modifiedRows.Any())
+                return;
+
+            using var db = new BookstoreContext();
+
+            foreach (var row in modifiedRows)
+            {
+                var entity = await db.StockLevels.FirstAsync(sl =>
+                    sl.StoreId == SelectedStore.StoreId &&
+                    sl.Isbn == row.Isbn);
+
+                entity.Quantity = row.Quantity;
+                entity.QuantityOrdered = row.QuantityOrdered;
+            }
+
+            await db.SaveChangesAsync();
+
+            foreach (var row in modifiedRows)
+                row.AcceptChanges();
+
+            SaveStockLevelCommand.RaiseCanExecuteChanged();
+        }
+
+        public bool CanSaveStock(object? args)
+        {
+            return StockLevel.Any(r => r.IsModified);
+            //if (args is not StockLevelRowViewModel stockLevel)
+            //    return false;
+
+            //return stockLevel.Quantity >= 0 &&
+            //       stockLevel.Quantity <= 1000 &&
+            //       stockLevel.QuantityOrdered >= 0 &&
+            //       stockLevel.QuantityOrdered <= 1000;
+        }
+
         public StockLevelViewModel(MainWindowViewModel mainWindowViewModel)
         {
             _mainWindowViewModel = mainWindowViewModel;
-            StockLevel = new ObservableCollection<StockLevelOverview>();
+
+            SaveStockLevelCommand = new DelegateCommand(SaveStock, CanSaveStock);
 
             _mainWindowViewModel.PropertyChanged += async (_, e) =>
             {
@@ -28,6 +74,7 @@ namespace BookstoreApp.ViewModel
                     await LoadStockLevelAsync();
                 }
             };
+
         }
 
         public ObservableCollection<Store> Stores => _mainWindowViewModel.Stores;
@@ -35,60 +82,54 @@ namespace BookstoreApp.ViewModel
         public Store? SelectedStore
         {
             get => _mainWindowViewModel.SelectedStore;
-            //set
-            //{
-            //    _mainWindowViewModel.SelectedStore = value;
-            //    RaisePropertyChanged();
-            //    _ = LoadStockLevelAsync();
-            //}
+
         }
 
-        public ObservableCollection<StockLevelOverview> StockLevel { get; set; }
+        private StockLevelRowViewModel _selectedRow;
+        public StockLevelRowViewModel SelectedRow
+        {
+            get => _selectedRow;
+            set
+            {
+                _selectedRow = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public ObservableCollection<StockLevelRowViewModel> StockLevel { get; } = new();
 
         public async Task LoadStockLevelAsync()
         {
+            StockLevel.Clear();
+
             if (SelectedStore is null)
-            {
-                StockLevel ??= new ObservableCollection<StockLevelOverview>();
-                StockLevel.Clear();
                 return;
-            }
-
-            //var store = _mainWindowViewModel.SelectedStore;
-            //if (store is null) { StockLevel.Clear(); return; }
-            //var storeId = store.StoreId;
-
-            var storeId = SelectedStore.StoreId;
 
             using var db = new BookstoreContext();
 
-            var raw = await db.StockLevels
-                .Where(sl => sl.StoreId == storeId)
-                .Select(sl => new
-                {
+            var items = await db.StockLevels
+                .Where(sl => sl.StoreId == SelectedStore.StoreId)
+                .Select(sl => new StockLevelRowViewModel(
                     sl.Isbn,
-                    Title = sl.IsbnNavigation.Title,
-                    Authors = sl.IsbnNavigation.Authors.Select(a => new { a.FirstName, a.Surname }).ToList(),
+                    sl.IsbnNavigation.Title,
+                    string.Join(", ",
+                        sl.IsbnNavigation.Authors
+                            .Select(a => a.FirstName + " " + a.Surname)),
                     sl.Quantity,
                     sl.QuantityOrdered,
-                    SalesPrice = sl.IsbnNavigation.SalesPrice
-                })
+                    sl.IsbnNavigation.SalesPrice
+                ))
                 .ToListAsync();
 
-            var items = raw.Select(x => new StockLevelOverview
-            {
-                Isbn = x.Isbn,
-                Title = x.Title,
-                Author = string.Join(", ", x.Authors.Select(a => $"{a.FirstName} {a.Surname}")),
-                Quantity = x.Quantity,
-                QuantityOrdered = x.QuantityOrdered,
-                SalesPrice = x.SalesPrice
-            }).ToList();
-
-            StockLevel ??= new ObservableCollection<StockLevelOverview>();
-            StockLevel.Clear();
             foreach (var item in items)
+            {
+                item.OnModifiedChanged =
+                    () => SaveStockLevelCommand.RaiseCanExecuteChanged();
+
                 StockLevel.Add(item);
+            }
+
+           
         }
     }
 }

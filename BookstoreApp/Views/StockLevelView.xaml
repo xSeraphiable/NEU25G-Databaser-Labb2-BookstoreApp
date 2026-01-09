@@ -15,19 +15,23 @@
             <TextBlock Text="Vald butik: " Margin="2" FontWeight="Bold"/>
             <TextBlock Text="{Binding SelectedStore.StoreId, UpdateSourceTrigger=PropertyChanged}" Margin="2"/>
             <TextBlock Text=" "/>
-            <TextBlock Text="{Binding SelectedStore.Street, UpdateSourceTrigger=PropertyChanged}" Margin="2"/>    
+            <TextBlock Text="{Binding SelectedStore.Street, UpdateSourceTrigger=PropertyChanged}" Margin="2"/>
+            <Button Content="Spara ändringar"
+                    Command="{Binding SaveStockLevelCommand}" />
         </StackPanel>
         <DataGrid Grid.Row="1"
                   AutoGenerateColumns="False"
                   ItemsSource="{Binding StockLevel}"
+                  SelectedItem="{Binding SelectedRow, Mode=TwoWay}" 
                   AlternatingRowBackground="PaleTurquoise"
                   Margin="10 0 10 10">
+            <!--behöver fixa så att inte alla kolumner är redigerbara-->
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ISBN" Binding="{Binding Isbn}"/>
                 <DataGridTextColumn Header="Titel" Binding="{Binding Title}"/>
                 <DataGridTextColumn Header="Författare" Binding="{Binding Author}"/>
-                <DataGridTextColumn Header="I lager" Binding="{Binding Quantity}"/>
-                <DataGridTextColumn Header="Antal beställda" Binding="{Binding QuantityOrdered}"/>
+                <DataGridTextColumn Header="I lager" Binding="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridTextColumn Header="Antal beställda" Binding="{Binding QuantityOrdered, UpdateSourceTrigger=PropertyChanged}"/>
                 <DataGridTextColumn Header="Försäljningspris" Binding="{Binding SalesPrice}"/>
             </DataGrid.Columns>   
         </DataGrid>

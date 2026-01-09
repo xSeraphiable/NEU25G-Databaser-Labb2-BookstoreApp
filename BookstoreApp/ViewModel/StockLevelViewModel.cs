@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
 using System.Text;
@@ -50,14 +51,10 @@ namespace BookstoreApp.ViewModel
 
         public bool CanSaveStock(object? args)
         {
-            return StockLevel.Any(r => r.IsModified);
-            //if (args is not StockLevelRowViewModel stockLevel)
-            //    return false;
+            return StockLevel.Any(r =>
+         r.IsModified &&
+         !r.HasErrors);
 
-            //return stockLevel.Quantity >= 0 &&
-            //       stockLevel.Quantity <= 1000 &&
-            //       stockLevel.QuantityOrdered >= 0 &&
-            //       stockLevel.QuantityOrdered <= 1000;
         }
 
         public StockLevelViewModel(MainWindowViewModel mainWindowViewModel)
@@ -129,7 +126,7 @@ namespace BookstoreApp.ViewModel
                 StockLevel.Add(item);
             }
 
-           
+
         }
     }
 }

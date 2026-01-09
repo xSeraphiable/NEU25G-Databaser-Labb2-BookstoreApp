@@ -11,28 +11,112 @@
             <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="8 8 0 0">
+        <Grid Grid.Row="0" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Label -->
+            <TextBlock Grid.Column="0"
+               Text="Vald butik:"
+               FontWeight="SemiBold"
+               VerticalAlignment="Center"
+               Margin="0,0,8,0"/>
+
+            <!-- StoreId -->
+            <TextBlock Grid.Column="1"
+               Text="{Binding SelectedStore.StoreId}"
+               VerticalAlignment="Center"
+               Margin="0,0,12,0"/>
+
+            <!-- Street -->
+            <TextBlock Grid.Column="2"
+               Text="{Binding SelectedStore.Street}"
+               VerticalAlignment="Center"
+               TextTrimming="CharacterEllipsis"/>
+
+            <!-- Save button -->
+            <Button Grid.Column="3"
+            Content="Spara ändringar"
+            Command="{Binding SaveStockLevelCommand}"
+            Margin="12,0,0,0"/>
+            <!--<StackPanel Grid.Row="0" Orientation="Horizontal" Margin="8 8 0 0">
             <TextBlock Text="Vald butik: " Margin="2" FontWeight="Bold"/>
             <TextBlock Text="{Binding SelectedStore.StoreId, UpdateSourceTrigger=PropertyChanged}" Margin="2"/>
             <TextBlock Text=" "/>
             <TextBlock Text="{Binding SelectedStore.Street, UpdateSourceTrigger=PropertyChanged}" Margin="2"/>
             <Button Content="Spara ändringar"
-                    Command="{Binding SaveStockLevelCommand}" />
-        </StackPanel>
+                    Command="{Binding SaveStockLevelCommand}"
+                    />
+        </StackPanel>-->
+        </Grid>
         <DataGrid Grid.Row="1"
                   AutoGenerateColumns="False"
                   ItemsSource="{Binding StockLevel}"
-                  SelectedItem="{Binding SelectedRow, Mode=TwoWay}" 
-                  AlternatingRowBackground="PaleTurquoise"
-                  Margin="10 0 10 10">
-            <!--behöver fixa så att inte alla kolumner är redigerbara-->
+                  SelectedItem="{Binding SelectedRow}" 
+                  Margin="10"
+                 >  
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ISBN" Binding="{Binding Isbn}"/>
-                <DataGridTextColumn Header="Titel" Binding="{Binding Title}"/>
-                <DataGridTextColumn Header="Författare" Binding="{Binding Author}"/>
-                <DataGridTextColumn Header="I lager" Binding="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}"/>
-                <DataGridTextColumn Header="Antal beställda" Binding="{Binding QuantityOrdered, UpdateSourceTrigger=PropertyChanged}"/>
-                <DataGridTextColumn Header="Försäljningspris" Binding="{Binding SalesPrice}"/>
+                <DataGridTextColumn Header="ISBN" 
+                                    Binding="{Binding Isbn}"
+                                    IsReadOnly="True"/>
+                <DataGridTextColumn Header="Titel" 
+                                    Binding="{Binding Title}"
+                                    IsReadOnly="True"/>
+                <DataGridTextColumn Header="Författare" 
+                                    Binding="{Binding Author}"
+                                    IsReadOnly="True"/>
+                <DataGridTextColumn Header="I lager"
+                                    Binding="{Binding Quantity,
+                                              Mode=TwoWay,
+                                              UpdateSourceTrigger=LostFocus,
+                                              ValidatesOnDataErrors=True,
+                                              NotifyOnValidationError=True}">
+
+                                    <DataGridTextColumn.EditingElementStyle>
+                                        <Style TargetType="TextBox">
+                                            <Style.Triggers>
+                                                <Trigger Property="Validation.HasError" Value="True">
+                                                    <Setter Property="ToolTip"
+                                                Value="{Binding RelativeSource={RelativeSource Self},
+                                                        Path=(Validation.Errors)[0].ErrorContent,
+                                                        FallbackValue={x:Null},
+                                                        TargetNullValue={x:Null}}" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </DataGridTextColumn.EditingElementStyle>   
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="Antal beställda"
+                                    Binding="{Binding QuantityOrdered,
+                                                      Mode=TwoWay,
+                                                      UpdateSourceTrigger=LostFocus,
+                                                      ValidatesOnDataErrors=True,
+                                                      NotifyOnValidationError=True}">
+
+                                        <DataGridTextColumn.EditingElementStyle>
+                                            <Style TargetType="TextBox">
+                                                <Style.Triggers>
+                                                    <Trigger Property="Validation.HasError" Value="True">
+                                                        <Setter Property="ToolTip"
+                                                Value="{Binding RelativeSource={RelativeSource Self},
+                                                        Path=(Validation.Errors)[0].ErrorContent,
+                                                        FallbackValue={x:Null},
+                                                        TargetNullValue={x:Null}}" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </DataGridTextColumn.EditingElementStyle>   
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="Försäljningspris" 
+                    Binding="{Binding SalesPrice}"
+                    IsReadOnly="True"/>
+                
             </DataGrid.Columns>   
         </DataGrid>
             

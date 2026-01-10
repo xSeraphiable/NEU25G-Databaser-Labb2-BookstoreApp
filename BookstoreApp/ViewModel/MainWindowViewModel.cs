@@ -52,11 +52,13 @@ namespace BookstoreApp.ViewModel
         }
 
         public StockLevelViewModel StockLevelViewModel { get; set; }
+        public BooksViewModel BooksViewModel { get; set; }
 
         public MainWindowViewModel()
         {
             StockLevelViewModel = new StockLevelViewModel(this);
-            CurrentView = StockLevelViewModel;
+            BooksViewModel = new BooksViewModel(this);
+            CurrentView = BooksViewModel;
             _ = LoadStoresAsync();
 
             SelectStoreCommand = new DelegateCommand(SelectPack, CanSelectPack);

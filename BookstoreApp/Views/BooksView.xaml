@@ -7,6 +7,88 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Content="Ny bok"
+            Grid.Column="0"
+            Margin="0,0,6,0"/>
+
+            <Button Content="Spara"
+            Grid.Column="1"
+            Margin="0,0,6,0"/>
+
+            <Button Content="Avbryt"
+            Grid.Column="2"/>
+
+            <Button Content="Ta bort"
+            Grid.Column="4"/>
+        </Grid>
+        <Grid Grid.Row="1" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+            <DataGrid Grid.Column="0"
+                        Margin="0,0,10,0"
+                        AutoGenerateColumns="False"
+                        ItemsSource="{Binding Rows}"
+                        SelectedItem="{Binding SelectedBook}"
+                      IsReadOnly="True"
+                      >
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ISBN" Binding="{Binding Isbn}"/>
+                    <DataGridTextColumn Header="Titel" Binding="{Binding Title}"/>
+                    <DataGridTextColumn Header="Pris" Binding="{Binding Price}"/>
+                    <DataGridTextColumn Header="Utgiven"
+                            Binding="{Binding ReleaseDate,
+                                      StringFormat={}{0:yyyy-MM-dd}}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <StackPanel Grid.Column="1">
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="ISBN" Margin="0,0,8,6"/>
+                <TextBox   Grid.Row="0" Grid.Column="1" Margin="0,0,0,6"/>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Titel" Margin="0,0,8,6"/>
+                <TextBox   Grid.Row="1" Grid.Column="1" Margin="0,0,0,6"/>
+
+                <!-- Författare -->
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Författare" Margin="0,0,8,6"/>
+                <TextBox   Grid.Row="2" Grid.Column="1" Margin="0,0,0,6"/>
+
+                <!-- Utgivningsdatum -->
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="Utgivningsdatum" Margin="0,0,8,6"/>
+                <DatePicker Grid.Row="3" Grid.Column="1" Margin="0,0,0,6"/>
+
+                <!-- Antal sidor -->
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="Antal sidor" Margin="0,0,8,6"/>
+                <TextBox   Grid.Row="4" Grid.Column="1" Margin="0,0,0,6"/>
+
+                <TextBlock Grid.Row="5" Grid.Column="0" Text="Vikt" Margin="0,0,8,6"/>
+                <TextBox   Grid.Row="5" Grid.Column="1" Margin="0,0,0,6"/>
+
+                <TextBlock Grid.Row="5" Grid.Column="0" Text="Genre" Margin="0,0,8,6"/>
+                <TextBox   Grid.Row="5" Grid.Column="1" Margin="0,0,0,6"/>
+
+                <TextBlock Grid.Row="5" Grid.Column="0" Text="Språk" Margin="0,0,8,6"/>
+                <TextBox   Grid.Row="5" Grid.Column="1" Margin="0,0,0,6"/>
+
+                <!-- Inköpspris -->
+                <TextBlock Grid.Row="5" Grid.Column="0" Text="Inköpspris" Margin="0,0,8,6"/>
+                <TextBox   Grid.Row="5" Grid.Column="1" Margin="0,0,0,6"/>
+            </StackPanel>
+
+        </Grid>
+
     </Grid>
 </UserControl>

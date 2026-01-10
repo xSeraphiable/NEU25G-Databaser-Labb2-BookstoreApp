@@ -10,6 +10,9 @@
         <DataTemplate DataType="{x:Type vm:StockLevelViewModel}">
             <views:StockLevelView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:BooksViewModel}">
+            <views:BooksView />
+        </DataTemplate>
 
         <Style TargetType="DataGrid">
             <!-- Struktur -->

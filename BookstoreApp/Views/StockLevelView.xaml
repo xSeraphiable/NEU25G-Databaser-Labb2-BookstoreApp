@@ -8,7 +8,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Margin="10">
@@ -16,6 +16,7 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
@@ -43,15 +44,10 @@
             Content="Spara ändringar"
             Command="{Binding SaveStockLevelCommand}"
             Margin="12,0,0,0"/>
-            <!--<StackPanel Grid.Row="0" Orientation="Horizontal" Margin="8 8 0 0">
-            <TextBlock Text="Vald butik: " Margin="2" FontWeight="Bold"/>
-            <TextBlock Text="{Binding SelectedStore.StoreId, UpdateSourceTrigger=PropertyChanged}" Margin="2"/>
-            <TextBlock Text=" "/>
-            <TextBlock Text="{Binding SelectedStore.Street, UpdateSourceTrigger=PropertyChanged}" Margin="2"/>
-            <Button Content="Spara ändringar"
-                    Command="{Binding SaveStockLevelCommand}"
-                    />
-        </StackPanel>-->
+            <Button Grid.Column="4"
+          Content="Avbryt"
+         
+          Margin="12,0,0,0"/>
         </Grid>
         <DataGrid Grid.Row="1"
                   AutoGenerateColumns="False"

@@ -18,21 +18,31 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
             <Button Content="Ny bok"
             Grid.Column="0"
             Margin="0,0,6,0"/>
-
-            <Button Content="Spara"
+            
+            <Button Content="Redigera"
             Grid.Column="1"
             Margin="0,0,6,0"/>
 
-            <Button Content="Avbryt"
-            Grid.Column="2"/>
-
             <Button Content="Ta bort"
-            Grid.Column="4"/>
+            Grid.Column="2"
+            Margin="0,0,6,0"/>
+
+            <Button Content="Spara"
+            Grid.Column="4"
+            Margin="0,0,6,0"/>
+                       
+
+            <Button Content="Avbryt"
+            Grid.Column="5"
+            Margin="0,0,6,0"/>
+
+           
         </Grid>
         <Grid Grid.Row="1" Margin="10">
             <Grid.ColumnDefinitions>
@@ -66,9 +76,10 @@
                 <TextBlock Grid.Row="2" Grid.Column="0" Text="Författare" Margin="0,0,8,6"/>
                 <TextBox   Grid.Row="2" Grid.Column="1" Margin="0,0,0,6"/>
 
-                <!-- Utgivningsdatum -->
+                <!-- Utgivningsdatum - glöm ej fixa datepicker månad/rubrik (syns ej) -->
                 <TextBlock Grid.Row="3" Grid.Column="0" Text="Utgivningsdatum" Margin="0,0,8,6"/>
-                <DatePicker Grid.Row="3" Grid.Column="1" Margin="0,0,0,6"/>
+                <DatePicker Grid.Row="3" Grid.Column="1" Margin="0,0,0,0"
+                            />
 
                 <!-- Antal sidor -->
                 <TextBlock Grid.Row="4" Grid.Column="0" Text="Antal sidor" Margin="0,0,8,6"/>

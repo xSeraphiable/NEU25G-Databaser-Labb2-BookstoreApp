@@ -57,7 +57,7 @@ namespace BookstoreApp.ViewModel
         public MainWindowViewModel()
         {
             StockLevelViewModel = new StockLevelViewModel(this);
-            BooksViewModel = new BooksViewModel(this);
+            BooksViewModel = new BooksViewModel();
             CurrentView = BooksViewModel;
             _ = LoadStoresAsync();
 

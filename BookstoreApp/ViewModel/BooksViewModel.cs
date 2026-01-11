@@ -32,9 +32,13 @@ namespace BookstoreApp.ViewModel
                 return;
 
             using var db = new BookstoreContext();
-            var book = db.Books.First(b => b.Isbn == SelectedBookRow.Isbn);
+
+            var book = db.Books
+                .Include(b => b.Category)
+                .First(b => b.Isbn == SelectedBookRow.Isbn);
 
             var vm = new BookDetailViewModel(book);
+
             var dialog = new AddEditBookWindow
             {
                 DataContext = vm
@@ -42,9 +46,25 @@ namespace BookstoreApp.ViewModel
 
             if (dialog.ShowDialog() == true)
             {
-                //SaveBook(vm);
                 LoadBookRows();
             }
+            //if (SelectedBookRow is null)
+            //    return;
+
+            //using var db = new BookstoreContext();
+            //var book = db.Books.First(b => b.Isbn == SelectedBookRow.Isbn);
+
+            //var vm = new BookDetailViewModel(book);
+            //var dialog = new AddEditBookWindow
+            //{
+            //    DataContext = vm
+            //};
+
+            //if (dialog.ShowDialog() == true)
+            //{
+            //    //SaveBook(vm);
+            //    LoadBookRows();
+            //}
         }
 
         public void NewBook(object? args)

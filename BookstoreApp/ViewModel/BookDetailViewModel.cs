@@ -1,6 +1,7 @@
 ﻿using BookstoreApp.Infrastructure;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -14,15 +15,19 @@ namespace BookstoreApp.ViewModel
         // === Konstruktor: NY BOK ===
         public BookDetailViewModel()
         {
+            Initialize();
             IsNew = true;
             IsModified = false;
 
             ReleaseDate = DateOnly.FromDateTime(DateTime.Today);
+
+
         }
 
         // === Konstruktor: REDIGERA BEFINTLIG BOK ===
         public BookDetailViewModel(Book book)
         {
+            Initialize();
             IsNew = false;
             IsModified = false;
 
@@ -31,14 +36,42 @@ namespace BookstoreApp.ViewModel
             SalesPrice = book.SalesPrice;
             //PurchasePrice = book.PurchasePrice;
             Weight = book.Weight;
-            CategoryId = book.CategoryId;
-            Category = book.Category;
             ReleaseDate = book.ReleaseDate;
             NumberOfPages = book.NumberOfPages;
+            SetCategory(book.Category);
         }
 
         // === Properties ===
+        public ObservableCollection<Category> Categories { get; private set; }
 
+        private void Initialize()
+        {
+            Categories = new ObservableCollection<Category>();
+            LoadCategories();
+        }
+        private void LoadCategories()
+        {
+            using var db = new BookstoreContext();
+
+            Categories.Clear();
+
+            foreach (var category in db.Categories.OrderBy(c => c.Name))
+            {
+                Categories.Add(category);
+            }
+        }
+
+        private void SetCategory(Category? bookCategory)
+        {
+            if (bookCategory == null)
+            {
+                Category = null!;
+                return;
+            }
+
+            Category = Categories.FirstOrDefault(c =>
+                c.CategoryId == bookCategory.CategoryId);
+        }
         public string Isbn
         {
             get => _isbn;
@@ -49,9 +82,20 @@ namespace BookstoreApp.ViewModel
         public string Title
         {
             get => _title;
-            set { _title = value; OnChanged(); }
+            set
+            {
+                _title = value;
+                OnChanged();
+            }
         }
         private string _title = string.Empty;
+
+        public string Language
+        {
+            get => _language;
+            set { _language = value; OnChanged(); }
+        }
+        private string _language = string.Empty;
 
         public decimal SalesPrice
         {
@@ -119,7 +163,73 @@ namespace BookstoreApp.ViewModel
 
         private string Validate(string propertyName)
         {
-            // TODO: implementera senare
+            switch (propertyName)
+            {
+                case nameof(Isbn):
+                    if (string.IsNullOrWhiteSpace(Isbn))
+                    {
+                        return "ISBN måste anges";
+                    }
+                    if (Isbn.Length != 13)
+                    {
+                        return "ISBN måste vara exakt 13 tecken";
+                    }
+                    if (!Isbn.All(char.IsDigit))
+                    {
+                        return "ISBN får endast innehålla siffror";
+                    }
+                    break;
+                case nameof(Title):
+                    if (string.IsNullOrWhiteSpace(Title))
+                    {
+                        return "Titel måste anges";
+                    }
+                    if (Title.Length > 200)
+                    {
+                        return "Titeln är för lång (max 200 tecken)";
+                    }
+                    break;
+                case nameof(NumberOfPages):
+                    if (NumberOfPages is null)
+                    {
+                        return string.Empty;
+                    }
+                    if (NumberOfPages <= 0)
+                    {
+                        return "Antal sidor måste vara större än 0";
+                    }
+                    if (NumberOfPages > 10000)
+                    {
+                        return "Ange antal sidor under 10 000";
+                    }
+                    break;
+                case nameof(Language):
+                    if (Language is null)
+                    {
+                        return string.Empty;
+                    }
+                    if (Language.Length > 50)
+                    {
+                        return "Texten är för lång (max 50 tecken)";                       
+                    }
+                    break;
+                case nameof(Weight):
+                    if (Weight is null)
+                    {
+                        return string.Empty;
+                    }
+                    if (Weight <= 0)
+                    {
+                        return "Vikt måste vara större än 0";
+                    }
+                    if (Weight > 10000)
+                    {
+                        return "Ange en vikt under 10 000 gram";
+                    }
+                    break;
+
+            }
+
             return string.Empty;
         }
     }

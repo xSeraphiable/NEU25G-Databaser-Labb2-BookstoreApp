@@ -5,31 +5,124 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BookstoreApp.Views"
         mc:Ignorable="d"
-        Title="AddEditBookWindow" Height="450" Width="800">
+        Title="AddEditBookWindow" Height="450" Width="500">
     <Grid Margin="12">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- ISBN -->
+            <RowDefinition Height="Auto"/>
+            <!-- Titel -->
+            <RowDefinition Height="Auto"/>
+            <!-- Författare -->
+            <RowDefinition Height="Auto"/>
+            <!-- Utgivningsdatum -->
+            <RowDefinition Height="Auto"/>
+            <!-- Kategori / Genre -->
+            <RowDefinition Height="Auto"/>
+            <!-- Språk -->
+            <RowDefinition Height="Auto"/>
+            <!-- Sidor / Vikt -->
+            <RowDefinition Height="Auto"/>
+            <!-- Pris -->
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
+            <!-- Knappar -->
         </Grid.RowDefinitions>
 
-        <!-- FORMULÄR (kommer sen) -->
-        <StackPanel>
-            <TextBlock Text="Formulär här..." />
-        </StackPanel>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-        <!-- KNAPPAR -->
-        <StackPanel Grid.Row="1"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Right"
-                    Margin="0,12,0,0">
+        <!-- ISBN -->
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="ISBN" />
+        <TextBox   Grid.Row="0" Grid.Column="1"
+               MaxLength="13"
+               Text="{Binding Isbn, UpdateSourceTrigger=PropertyChanged,
+                              ValidatesOnDataErrors=True}"/>
+
+        <!-- Titel -->
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Titel" />
+        <TextBox   Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"
+               MaxLength="200"
+               Text="{Binding Title, UpdateSourceTrigger=PropertyChanged,
+                              ValidatesOnDataErrors=True}"/>
+
+        <!-- Författare (placeholder) -->
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Författare" />
+        <TextBox   Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"/>
+
+        <!-- Utgivningsdatum -->
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="Utgiven" />
+        <DatePicker Grid.Row="3" Grid.Column="1"
+                SelectedDate="{Binding ReleaseDate,
+                                       UpdateSourceTrigger=PropertyChanged, 
+                                       Converter={StaticResource DateOnlyConverter}}"
+                     />
+
+        <!-- Kategori / Genre -->
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="Kategori" />
+        <ComboBox  Grid.Row="4" Grid.Column="1"
+               ItemsSource="{Binding Categories}"
+               SelectedItem="{Binding Category}"
+               DisplayMemberPath="Name"/>
+
+        <TextBlock Grid.Row="4" Grid.Column="3" Text="Genre" />
+        <ComboBox  Grid.Row="4" Grid.Column="4"
+               ItemsSource="{Binding Genre}"
+               SelectedItem="{Binding Genre}"
+               DisplayMemberPath="Name"/>
+
+        <!-- Språk -->
+        <TextBlock Grid.Row="5" Grid.Column="0" Text="Språk" />
+        <TextBox   Grid.Row="5" Grid.Column="1"
+               Text="{Binding Language,
+                              UpdateSourceTrigger=PropertyChanged,
+                              ValidatesOnDataErrors=True}"/>
+
+        <!-- Antal sidor / Vikt -->
+        <TextBlock Grid.Row="6" Grid.Column="0" Text="Antal sidor" />
+        <TextBox   Grid.Row="6" Grid.Column="1"
+               Text="{Binding NumberOfPages,
+                              UpdateSourceTrigger=LostFocus,
+                              ValidatesOnDataErrors=True}"/>
+
+        <TextBlock Grid.Row="6" Grid.Column="3" Text="Vikt (g)" />
+        <TextBox   Grid.Row="6" Grid.Column="4"
+               Text="{Binding Weight,
+                              UpdateSourceTrigger=PropertyChanged,
+                              ValidatesOnDataErrors=True}"/>
+
+        <!-- Inköpspris / Försäljningspris -->
+        <TextBlock Grid.Row="7" Grid.Column="0" Text="Inköpspris" />
+        <TextBox   Grid.Row="7" Grid.Column="1"
+               Text="{Binding PurchasePrice,
+                              UpdateSourceTrigger=LostFocus,
+                              ValidatesOnDataErrors=True}"/>
+
+        <TextBlock Grid.Row="7" Grid.Column="3" Text="Försäljningspris" />
+        <TextBox   Grid.Row="7" Grid.Column="4"
+               Text="{Binding SalesPrice,
+                              UpdateSourceTrigger=LostFocus,
+                              ValidatesOnDataErrors=True}"/>
+
+        <!-- Knappar -->
+        <StackPanel Grid.Row="9"
+                Grid.ColumnSpan="5"
+                Orientation="Horizontal"
+                HorizontalAlignment="Right"
+                Margin="0,12,0,0">
 
             <Button Content="Avbryt"
-                    IsCancel="True"
-                    Margin="0,0,6,0"/>
+                IsCancel="True"
+                Margin="0,0,6,0"/>
 
             <Button Content="Spara"
-                    IsDefault="True"
-                    Click="OnSaveClicked"/>
+                IsDefault="True"
+                Click="OnSaveClicked"/>
         </StackPanel>
     </Grid>
 </Window>

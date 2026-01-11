@@ -1,4 +1,6 @@
-﻿using BookstoreApp.Infrastructure;
+﻿using BookstoreApp.Commands;
+using BookstoreApp.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,6 +23,8 @@ namespace BookstoreApp.ViewModel
 
             ReleaseDate = DateOnly.FromDateTime(DateTime.Today);
 
+            SaveBookCommand = new DelegateCommand(SaveBookAsync);
+
 
         }
 
@@ -34,6 +38,7 @@ namespace BookstoreApp.ViewModel
             Isbn = book.Isbn;
             Title = book.Title;
             SalesPrice = book.SalesPrice;
+            Language = book.Language;
             //PurchasePrice = book.PurchasePrice;
             Weight = book.Weight;
             ReleaseDate = book.ReleaseDate;
@@ -41,37 +46,79 @@ namespace BookstoreApp.ViewModel
             SetCategory(book.Category);
         }
 
-        // === Properties ===
+        public DelegateCommand SaveBookCommand { get; }
         public ObservableCollection<Category> Categories { get; private set; }
+
+        public event Action<bool>? RequestClose;
 
         private void Initialize()
         {
             Categories = new ObservableCollection<Category>();
-            LoadCategories();
+            _ = LoadCategoriesAsync();
         }
-        private void LoadCategories()
+
+        public async void SaveBookAsync(object? args)
+        {
+
+            if (this == null)
+            {
+                return;
+            }
+
+            using var db = new BookstoreContext();
+
+            Book book;
+
+            if (IsNew)
+            {
+                book = new Book();
+                db.Books.Add(book);
+            }
+            else
+            {
+                book = await db.Books
+                    .FirstOrDefaultAsync(b => b.Isbn == Isbn);
+
+                if (book == null)
+                    return;
+            }
+
+            
+            book.Isbn = Isbn;
+            book.Title = Title;
+            book.SalesPrice = SalesPrice;
+            book.Weight = Weight;
+            book.ReleaseDate = ReleaseDate;
+            book.NumberOfPages = NumberOfPages;
+            book.CategoryId = Category.CategoryId;
+
+            await db.SaveChangesAsync();
+
+            RequestClose?.Invoke(true);
+        }
+
+        private async Task LoadCategoriesAsync()
         {
             using var db = new BookstoreContext();
 
-            Categories.Clear();
+            var categories = await db.Categories
+                .OrderBy(c => c.Name)
+                .ToListAsync();
 
-            foreach (var category in db.Categories.OrderBy(c => c.Name))
-            {
-                Categories.Add(category);
-            }
+            Categories.Clear();
+            foreach (var c in categories)
+                Categories.Add(c);
         }
 
         private void SetCategory(Category? bookCategory)
         {
-            if (bookCategory == null)
-            {
-                Category = null!;
+            if (bookCategory == null || Categories.Count == 0)
                 return;
-            }
 
             Category = Categories.FirstOrDefault(c =>
                 c.CategoryId == bookCategory.CategoryId);
         }
+
         public string Isbn
         {
             get => _isbn;
@@ -93,7 +140,11 @@ namespace BookstoreApp.ViewModel
         public string Language
         {
             get => _language;
-            set { _language = value; OnChanged(); }
+            set
+            {
+                _language = value;
+                OnChanged();
+            }
         }
         private string _language = string.Empty;
 
@@ -117,13 +168,6 @@ namespace BookstoreApp.ViewModel
             set { _weight = value; OnChanged(); }
         }
         private int? _weight;
-
-        public int CategoryId
-        {
-            get => _categoryId;
-            set { _categoryId = value; OnChanged(); }
-        }
-        private int _categoryId;
 
         public DateOnly? ReleaseDate
         {
@@ -210,7 +254,7 @@ namespace BookstoreApp.ViewModel
                     }
                     if (Language.Length > 50)
                     {
-                        return "Texten är för lång (max 50 tecken)";                       
+                        return "Texten är för lång (max 50 tecken)";
                     }
                     break;
                 case nameof(Weight):
@@ -226,6 +270,10 @@ namespace BookstoreApp.ViewModel
                     {
                         return "Ange en vikt under 10 000 gram";
                     }
+                    break;
+                case nameof(Category):
+                    if (Category == null)
+                        return "Kategori måste väljas";
                     break;
 
             }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BookstoreApp.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,11 +23,19 @@ namespace BookstoreApp.Views
         public AddEditBookWindow()
         {
             InitializeComponent();
+            Loaded += AddEditBookWindow_Loaded;
         }
 
-        private void OnSaveClicked(object sender, RoutedEventArgs e)
+        private void AddEditBookWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            DialogResult = true;
+            if (DataContext is BookDetailViewModel vm)
+            {
+                vm.RequestClose += result =>
+                {
+                    DialogResult = result;
+                    Close();
+                };
+            }
         }
     }
 }

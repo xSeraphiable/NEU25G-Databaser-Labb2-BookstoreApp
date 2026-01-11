@@ -1,5 +1,7 @@
 ﻿using BookstoreApp.Commands;
 using BookstoreApp.Infrastructure;
+using BookstoreApp.Views;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,37 +16,61 @@ namespace BookstoreApp.ViewModel
 
         public BooksViewModel()
         {
-            SelectBookCommand = new DelegateCommand(SelectBook, CanSelectBook);
+            EditBookCommand = new DelegateCommand(EditBook);
+            NewBookCommand = new DelegateCommand(NewBook);
             LoadBookRows();
         }
 
         public ObservableCollection<BookRowViewModel> Rows { get; private set; }
 
-        public DelegateCommand SelectBookCommand { get; }
+        public DelegateCommand EditBookCommand { get; }
+        public DelegateCommand NewBookCommand { get; }
 
-        public void SelectBook(object? args)
+        public void EditBook(object? args)
         {
+            if (SelectedBookRow is null)
+                return;
+
             using var db = new BookstoreContext();
+            var book = db.Books.First(b => b.Isbn == SelectedBookRow.Isbn);
 
-            var book = args as BookRowViewModel;
+            var vm = new BookDetailViewModel(book);
+            var dialog = new AddEditBookWindow
+            {
+                DataContext = vm
+            };
 
-            //SelectedBook = new BookDetailViewModel(
-            //    db.Books.Select(b => b.Isbn).
-            //    Where(b => book.Isbn == ))
+            if (dialog.ShowDialog() == true)
+            {
+                //SaveBook(vm);
+                LoadBookRows();
+            }
         }
-        public bool CanSelectBook(object? args)
+
+        public void NewBook(object? args)
         {
-            return args is BookRowViewModel b;
+            var vm = new BookDetailViewModel();
+            var dialog = new AddEditBookWindow
+            {
+                DataContext = vm
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                //SaveBook(vm);
+                LoadBookRows();
+            }
         }
 
-        private Book _selectedBook;
 
-        public Book SelectedBook
+        private BookRowViewModel? _selectedBookRow;
+
+        public BookRowViewModel? SelectedBookRow
         {
-            get => _selectedBook;
+            get => _selectedBookRow;
             set
             {
-                _selectedBook = value;
+                _selectedBookRow = value;
                 RaisePropertyChanged();
             }
         }

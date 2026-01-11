@@ -8,98 +8,60 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Margin="10">
+
+        <!-- Toolbar -->
+        <Grid Grid.Row="0" Margin="10" HorizontalAlignment="Right">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <Button Content="Ny bok"
-            Grid.Column="0"
-            Margin="0,0,6,0"/>
-            
-            <Button Content="Redigera"
-            Grid.Column="1"
-            Margin="0,0,6,0"/>
+            <Button Grid.Column="0"
+                    Content="Ny bok"
+                    Command="{Binding NewBookCommand}"
+                    Margin="0,0,6,0"/>
 
-            <Button Content="Ta bort"
-            Grid.Column="2"
-            Margin="0,0,6,0"/>
+            <Button Grid.Column="1"
+                    Content="Redigera"
+                    Command="{Binding EditBookCommand}"
+                    Margin="0,0,6,0"/>
 
-            <Button Content="Spara"
-            Grid.Column="4"
-            Margin="0,0,6,0"/>
-                       
-
-            <Button Content="Avbryt"
-            Grid.Column="5"
-            Margin="0,0,6,0"/>
-
-           
-        </Grid>
-        <Grid Grid.Row="1" Margin="10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="3*"/>
-            </Grid.ColumnDefinitions>
-            <DataGrid Grid.Column="0"
-                        Margin="0,0,10,0"
-                        AutoGenerateColumns="False"
-                        ItemsSource="{Binding Rows}"
-                        SelectedItem="{Binding SelectedBook}"
-                      IsReadOnly="True"
-                      >
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="ISBN" Binding="{Binding Isbn}"/>
-                    <DataGridTextColumn Header="Titel" Binding="{Binding Title}"/>
-                    <DataGridTextColumn Header="Pris" Binding="{Binding Price}"/>
-                    <DataGridTextColumn Header="Utgiven"
-                            Binding="{Binding ReleaseDate,
-                                      StringFormat={}{0:yyyy-MM-dd}}"/>
-                </DataGrid.Columns>
-            </DataGrid>
-            <StackPanel Grid.Column="1">
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="ISBN" Margin="0,0,8,6"/>
-                <TextBox   Grid.Row="0" Grid.Column="1" Margin="0,0,0,6"/>
-
-                <TextBlock Grid.Row="1" Grid.Column="0" Text="Titel" Margin="0,0,8,6"/>
-                <TextBox   Grid.Row="1" Grid.Column="1" Margin="0,0,0,6"/>
-
-                <!-- Författare -->
-                <TextBlock Grid.Row="2" Grid.Column="0" Text="Författare" Margin="0,0,8,6"/>
-                <TextBox   Grid.Row="2" Grid.Column="1" Margin="0,0,0,6"/>
-
-                <!-- Utgivningsdatum - glöm ej fixa datepicker månad/rubrik (syns ej) -->
-                <TextBlock Grid.Row="3" Grid.Column="0" Text="Utgivningsdatum" Margin="0,0,8,6"/>
-                <DatePicker Grid.Row="3" Grid.Column="1" Margin="0,0,0,0"
-                            />
-
-                <!-- Antal sidor -->
-                <TextBlock Grid.Row="4" Grid.Column="0" Text="Antal sidor" Margin="0,0,8,6"/>
-                <TextBox   Grid.Row="4" Grid.Column="1" Margin="0,0,0,6"/>
-
-                <TextBlock Grid.Row="5" Grid.Column="0" Text="Vikt" Margin="0,0,8,6"/>
-                <TextBox   Grid.Row="5" Grid.Column="1" Margin="0,0,0,6"/>
-
-                <TextBlock Grid.Row="5" Grid.Column="0" Text="Genre" Margin="0,0,8,6"/>
-                <TextBox   Grid.Row="5" Grid.Column="1" Margin="0,0,0,6"/>
-
-                <TextBlock Grid.Row="5" Grid.Column="0" Text="Språk" Margin="0,0,8,6"/>
-                <TextBox   Grid.Row="5" Grid.Column="1" Margin="0,0,0,6"/>
-
-                <!-- Inköpspris -->
-                <TextBlock Grid.Row="5" Grid.Column="0" Text="Inköpspris" Margin="0,0,8,6"/>
-                <TextBox   Grid.Row="5" Grid.Column="1" Margin="0,0,0,6"/>
-            </StackPanel>
-
+            <Button Grid.Column="2"
+                    Content="Ta bort"
+                    Command="{Binding DeleteBookCommand}"/>
         </Grid>
 
+        <!-- Book list -->
+        <DataGrid Grid.Row="1"
+                  Margin="10"
+                  AutoGenerateColumns="False"
+                  ItemsSource="{Binding Rows}"
+                  SelectedItem="{Binding SelectedBookRow}"
+                  IsReadOnly="True">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ISBN"
+                                    Binding="{Binding Isbn}"
+                                    Width="*"/>
+
+                <DataGridTextColumn Header="Titel"
+                                    Binding="{Binding Title}"
+                                    Width="2*"/>
+
+                <DataGridTextColumn Header="Pris"
+                                    Binding="{Binding Price}"
+                                    Width="*"/>
+
+                <DataGridTextColumn Header="Utgiven"
+                                    Binding="{Binding ReleaseDate,
+                                              StringFormat={}{0:yyyy-MM-dd}}"
+                                    Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </UserControl>

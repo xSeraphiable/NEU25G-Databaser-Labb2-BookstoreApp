@@ -23,5 +23,10 @@ namespace BookstoreApp.Views
         {
             InitializeComponent();
         }
+
+        private void OnSaveClicked(object sender, RoutedEventArgs e)
+        {
+            DialogResult = true;
+        }
     }
 }

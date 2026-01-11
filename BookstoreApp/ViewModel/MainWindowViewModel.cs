@@ -15,12 +15,12 @@ namespace BookstoreApp.ViewModel
         public ObservableCollection<Store> Stores { get; } = new();
         public DelegateCommand SelectStoreCommand { get; }
 
-        public bool CanSelectPack(object? args)
+        public bool CanSelectStore(object? args)
         {
             return args is Store;
         }
 
-        public void SelectPack(object? args)
+        public void SelectStore(object? args)
         {
             if (args is Store store)
             {
@@ -61,7 +61,7 @@ namespace BookstoreApp.ViewModel
             CurrentView = BooksViewModel;
             _ = LoadStoresAsync();
 
-            SelectStoreCommand = new DelegateCommand(SelectPack, CanSelectPack);
+            SelectStoreCommand = new DelegateCommand(SelectStore, CanSelectStore);
         }
         private async Task LoadStoresAsync()
         {

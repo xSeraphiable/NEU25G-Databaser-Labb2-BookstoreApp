@@ -21,7 +21,7 @@ namespace BookstoreApp.ViewModel
             IsNew = true;
             IsModified = false;
 
-            ReleaseDate = DateOnly.FromDateTime(DateTime.Today);                 
+            ReleaseDate = DateOnly.FromDateTime(DateTime.Today);
 
 
         }
@@ -42,27 +42,30 @@ namespace BookstoreApp.ViewModel
             ReleaseDate = book.ReleaseDate;
             NumberOfPages = book.NumberOfPages;
             _initialCategory = book.Category;
-
-
+            _initialAuthors = book.Authors.ToList();
         }
 
         public DelegateCommand SaveBookCommand { get; private set; }
-       
-        public ObservableCollection<Category> Categories { get; private set; }
+
 
         public event Action<bool>? RequestClose;
 
         private void Initialize()
         {
             Categories = new ObservableCollection<Category>();
+
             _ = LoadCategoriesAsync();
+
+            Authors = new ObservableCollection<AuthorRowViewModel>();
+      
+            _ = LoadAllAuthorsAsync();
 
             SaveBookCommand = new DelegateCommand(SaveBookAsync);
         }
 
 
         public async void SaveBookAsync(object? args)
-        {    
+        {
             using var db = new BookstoreContext();
 
             Book book;
@@ -95,9 +98,40 @@ namespace BookstoreApp.ViewModel
             book.NumberOfPages = NumberOfPages;
             book.CategoryId = Category.CategoryId;
 
+            book.Authors.Clear();
+
+            foreach (var authorVm in Authors.Where(a => a.IsSelected))
+            {
+                book.Authors.Add(authorVm.Author);
+            }
+
             await db.SaveChangesAsync();
 
             RequestClose?.Invoke(true);
+        }
+
+        private async Task LoadAllAuthorsAsync()
+        {
+            using var db = new BookstoreContext();
+
+            var authors = await db.Authors
+                .OrderBy(a => a.Surname)
+                .ToListAsync();
+
+            Authors.Clear();
+
+            foreach (var author in authors)
+            {
+                var vm = new AuthorRowViewModel(author);
+
+                if (!IsNew && _initialAuthors != null)
+                {
+                    vm.IsSelected = _initialAuthors
+                        .Any(a => a.AuthorId == author.AuthorId);
+                }
+
+                Authors.Add(vm);
+            }
         }
 
         private async Task LoadCategoriesAsync()
@@ -120,6 +154,12 @@ namespace BookstoreApp.ViewModel
         }
 
         private Category? _initialCategory;
+        private ICollection<Author>? _initialAuthors;
+
+        public ObservableCollection<Category> Categories { get; private set; }
+        public ObservableCollection<AuthorRowViewModel> Authors { get; private set; }
+
+
 
         public string Isbn
         {
@@ -193,6 +233,12 @@ namespace BookstoreApp.ViewModel
         private Category? _category = null!;
 
 
+        private void OnChanged([CallerMemberName] string? name = null)
+        {
+            IsModified = true;
+            RaisePropertyChanged(name);
+            RaisePropertyChanged(nameof(IsModified));
+        }
 
         // === State ===
         public bool IsNew { get; }
@@ -205,12 +251,6 @@ namespace BookstoreApp.ViewModel
         public string this[string columnName] => Validate(columnName);
         public string Error => string.Empty;
 
-        private void OnChanged([CallerMemberName] string? name = null)
-        {
-            IsModified = true;
-            RaisePropertyChanged(name);
-            RaisePropertyChanged(nameof(IsModified));
-        }
 
         private string Validate(string propertyName)
         {

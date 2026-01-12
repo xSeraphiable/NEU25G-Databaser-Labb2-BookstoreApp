@@ -61,6 +61,9 @@
                                     Binding="{Binding ReleaseDate,
                                               StringFormat={}{0:yyyy-MM-dd}}"
                                     Width="*"/>
+                <DataGridTextColumn Header="Författare"
+                                    Binding="{Binding AuthorsText}"
+                                    Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

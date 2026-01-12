@@ -33,6 +33,7 @@ namespace BookstoreApp.ViewModel
         public DelegateCommand DeleteBookCommand { get; }
 
 
+
         private BookRowViewModel? _selectedBookRow;
 
         public BookRowViewModel? SelectedBookRow
@@ -97,6 +98,7 @@ namespace BookstoreApp.ViewModel
 
             var book = await db.Books
                 .Include(b => b.Category)
+                .Include(a => a.Authors)
                 .FirstAsync(b => b.Isbn == SelectedBookRow.Isbn);
 
             if (book == null)
@@ -143,19 +145,15 @@ namespace BookstoreApp.ViewModel
             using var db = new BookstoreContext();
 
             var books = await db.Books
-                .Select(b => new BookRowViewModel(
-                    b.Isbn,
-                    b.Title,
-                    b.SalesPrice,
-                    b.ReleaseDate
-                ))
+                .Include(b => b.Authors)
+                .Include(b => b.Category)
                 .ToListAsync();
 
             Rows.Clear();
 
             foreach (var book in books)
             {
-                Rows.Add(book);
+                Rows.Add(new BookRowViewModel(book));
             }
         }
 

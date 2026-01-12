@@ -72,10 +72,13 @@ namespace BookstoreApp.ViewModel
             using var db = new BookstoreContext();
 
             var book = await db.Books
+                .Include(a => a.Authors)
                 .FirstOrDefaultAsync(b => b.Isbn == SelectedBookRow.Isbn);
 
             if (book == null)
                 return;
+
+            book.Authors.Clear();
 
             db.Books.Remove(book);
             await db.SaveChangesAsync();

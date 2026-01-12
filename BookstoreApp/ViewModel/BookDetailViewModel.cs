@@ -21,9 +21,7 @@ namespace BookstoreApp.ViewModel
             IsNew = true;
             IsModified = false;
 
-            ReleaseDate = DateOnly.FromDateTime(DateTime.Today);
-
-            SaveBookCommand = new DelegateCommand(SaveBookAsync);
+            ReleaseDate = DateOnly.FromDateTime(DateTime.Today);                 
 
 
         }
@@ -44,9 +42,11 @@ namespace BookstoreApp.ViewModel
             ReleaseDate = book.ReleaseDate;
             NumberOfPages = book.NumberOfPages;
             SetCategory(book.Category);
+
+           
         }
 
-        public DelegateCommand SaveBookCommand { get; }
+        public DelegateCommand SaveBookCommand { get; private set; }
         public ObservableCollection<Category> Categories { get; private set; }
 
         public event Action<bool>? RequestClose;
@@ -55,23 +55,22 @@ namespace BookstoreApp.ViewModel
         {
             Categories = new ObservableCollection<Category>();
             _ = LoadCategoriesAsync();
+
+            SaveBookCommand = new DelegateCommand(SaveBookAsync);
         }
 
         public async void SaveBookAsync(object? args)
         {
-
-            if (this == null)
-            {
-                return;
-            }
-
             using var db = new BookstoreContext();
 
             Book book;
 
             if (IsNew)
             {
-                book = new Book();
+                book = new Book
+                {
+                    Isbn = Isbn
+                };
                 db.Books.Add(book);
             }
             else
@@ -83,7 +82,7 @@ namespace BookstoreApp.ViewModel
                     return;
             }
 
-            
+
             book.Isbn = Isbn;
             book.Title = Title;
             book.SalesPrice = SalesPrice;

@@ -82,6 +82,7 @@ namespace BookstoreApp.ViewModel
         public async void NewBook(object? args) //TODO: gör klart
         {
             var vm = new BookDetailViewModel();
+
             var dialog = new AddEditBookWindow
             {
                 DataContext = vm

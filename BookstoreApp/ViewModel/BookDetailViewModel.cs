@@ -41,9 +41,9 @@ namespace BookstoreApp.ViewModel
             Weight = book.Weight;
             ReleaseDate = book.ReleaseDate;
             NumberOfPages = book.NumberOfPages;
-            SetCategory(book.Category);
+            _initialCategory = book.Category;
 
-           
+
         }
 
         public DelegateCommand SaveBookCommand { get; private set; }
@@ -61,6 +61,9 @@ namespace BookstoreApp.ViewModel
 
         public async void SaveBookAsync(object? args)
         {
+
+     
+
             using var db = new BookstoreContext();
 
             Book book;
@@ -82,6 +85,8 @@ namespace BookstoreApp.ViewModel
                     return;
             }
 
+            if (Category == null)
+                return;
 
             book.Isbn = Isbn;
             book.Title = Title;
@@ -107,16 +112,15 @@ namespace BookstoreApp.ViewModel
             Categories.Clear();
             foreach (var c in categories)
                 Categories.Add(c);
+
+            if (_initialCategory != null)
+            {
+                Category = Categories.FirstOrDefault(c =>
+                    c.CategoryId == _initialCategory.CategoryId);
+            }
         }
 
-        private void SetCategory(Category? bookCategory)
-        {
-            if (bookCategory == null || Categories.Count == 0)
-                return;
-
-            Category = Categories.FirstOrDefault(c =>
-                c.CategoryId == bookCategory.CategoryId);
-        }
+        private Category? _initialCategory;
 
         public string Isbn
         {
@@ -182,12 +186,12 @@ namespace BookstoreApp.ViewModel
         }
         private int? _numberOfPages;
 
-        public Category Category
+        public Category? Category
         {
             get => _category;
             set { _category = value; OnChanged(); }
         }
-        private Category _category = null!;
+        private Category? _category = null!;
 
         // === State ===
         public bool IsNew { get; }

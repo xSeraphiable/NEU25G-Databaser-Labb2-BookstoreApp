@@ -59,6 +59,38 @@ namespace BookstoreApp.ViewModel
         {
             if (SelectedBookRow is null)
                 return;
+            
+            using var db = new BookstoreContext();
+
+
+            var book = await db.Books
+                .Include(a => a.Authors)
+                .Include(sl => sl.StockLevels)
+                .ThenInclude(s => s.Store)
+                .FirstOrDefaultAsync(b => b.Isbn == SelectedBookRow.Isbn);
+
+            if (book == null)
+                return;
+
+            var blockingStockLevels = book.StockLevels
+                .Where(sl => sl.Quantity > 0 || sl.QuantityOrdered > 0)
+                .ToList();
+
+            if (blockingStockLevels.Any())
+            {
+                var storeIds = blockingStockLevels
+                    .Where(sl => sl.Store != null)
+                    .Select(sl => sl.Store.StoreId)
+                    .Distinct();
+
+                MessageBox.Show(
+                    $"Boken kan inte tas bort eftersom den finns i lager eller är beställd i följande butik(er):\n\n{string.Join(", ", storeIds)}",
+                    "Kan inte ta bort bok",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+
+                return;
+            }
 
             var result = MessageBox.Show(
                 $"Är du säker på att du vill ta bort \"{SelectedBookRow.Title}\"?\nDetta går inte att ångra.",
@@ -67,15 +99,6 @@ namespace BookstoreApp.ViewModel
                 MessageBoxImage.Warning);
 
             if (result == MessageBoxResult.Cancel)
-                return;
-
-            using var db = new BookstoreContext();
-
-            var book = await db.Books
-                .Include(a => a.Authors)
-                .FirstOrDefaultAsync(b => b.Isbn == SelectedBookRow.Isbn);
-
-            if (book == null)
                 return;
 
             book.Authors.Clear();

@@ -47,6 +47,7 @@ namespace BookstoreApp.ViewModel
         }
 
         public DelegateCommand SaveBookCommand { get; private set; }
+       
         public ObservableCollection<Category> Categories { get; private set; }
 
         public event Action<bool>? RequestClose;
@@ -59,11 +60,9 @@ namespace BookstoreApp.ViewModel
             SaveBookCommand = new DelegateCommand(SaveBookAsync);
         }
 
+
         public async void SaveBookAsync(object? args)
-        {
-
-     
-
+        {    
             using var db = new BookstoreContext();
 
             Book book;
@@ -193,9 +192,14 @@ namespace BookstoreApp.ViewModel
         }
         private Category? _category = null!;
 
+
+
         // === State ===
         public bool IsNew { get; }
         public bool IsModified { get; private set; }
+
+
+
 
         // === Validation ===
         public string this[string columnName] => Validate(columnName);

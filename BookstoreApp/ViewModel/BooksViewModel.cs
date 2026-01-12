@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace BookstoreApp.ViewModel
 {
@@ -16,8 +17,10 @@ namespace BookstoreApp.ViewModel
 
         public BooksViewModel()
         {
-            EditBookCommand = new DelegateCommand(EditBook, CanEditBook);
-            NewBookCommand = new DelegateCommand(NewBook);
+            EditBookCommand = new DelegateCommand(EditBookAsync, CanEditBook);
+            NewBookCommand = new DelegateCommand(NewBookAsync);
+            DeleteBookCommand = new DelegateCommand(DeleteBookAsync, CanDeleteBook);
+
             Rows = new ObservableCollection<BookRowViewModel>();
 
             Load();
@@ -27,6 +30,7 @@ namespace BookstoreApp.ViewModel
 
         public DelegateCommand EditBookCommand { get; }
         public DelegateCommand NewBookCommand { get; }
+        public DelegateCommand DeleteBookCommand { get; }
 
 
         private BookRowViewModel? _selectedBookRow;
@@ -39,6 +43,7 @@ namespace BookstoreApp.ViewModel
                 _selectedBookRow = value;
                 RaisePropertyChanged();
                 EditBookCommand.RaiseCanExecuteChanged();
+                DeleteBookCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -46,7 +51,44 @@ namespace BookstoreApp.ViewModel
         {
             await LoadBookRowsAsync();
         }
-        public async void EditBook(object? args)
+
+
+
+        public async void DeleteBookAsync(object? args)
+        {
+            if (SelectedBookRow is null)
+                return;
+
+            var result = MessageBox.Show(
+                $"Är du säker på att du vill ta bort \"{SelectedBookRow.Title}\"?\nDetta går inte att ångra.",
+                "Radera bok",
+                MessageBoxButton.OKCancel,
+                MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Cancel)
+                return;
+
+            using var db = new BookstoreContext();
+
+            var book = await db.Books
+                .FirstOrDefaultAsync(b => b.Isbn == SelectedBookRow.Isbn);
+
+            if (book == null)
+                return;
+
+            db.Books.Remove(book);
+            await db.SaveChangesAsync();
+
+            await LoadBookRowsAsync();
+
+        }
+
+        public bool CanDeleteBook(object? args)
+        {
+            return SelectedBookRow != null;
+        }
+
+        public async void EditBookAsync(object? args)
         {
             if (SelectedBookRow is null)
                 return;
@@ -79,7 +121,7 @@ namespace BookstoreApp.ViewModel
             return SelectedBookRow != null;
         }
 
-        public async void NewBook(object? args) //TODO: gör klart
+        public async void NewBookAsync(object? args) //TODO: gör klart
         {
             var vm = new BookDetailViewModel();
 
@@ -91,7 +133,7 @@ namespace BookstoreApp.ViewModel
             if (dialog.ShowDialog() == true)
             {
                 //SaveBook(vm);
-               await LoadBookRowsAsync();
+                await LoadBookRowsAsync();
             }
         }
 
@@ -118,5 +160,5 @@ namespace BookstoreApp.ViewModel
         }
 
     }
-    
+
 }

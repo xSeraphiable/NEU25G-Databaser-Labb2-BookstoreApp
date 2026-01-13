@@ -1,5 +1,6 @@
 ﻿using BookstoreApp.Commands;
 using BookstoreApp.Infrastructure;
+using BookstoreApp.Views;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace BookstoreApp.ViewModel
 {
@@ -16,7 +18,11 @@ namespace BookstoreApp.ViewModel
         public AuthorsViewModel()
         {
             AuthorRows = new ObservableCollection<AuthorRowViewModel>();
-            Load();
+            _ = LoadAuthorRowsAsync();
+
+            NewAuthorCommand = new DelegateCommand(NewAuthorAsync);
+            EditAuthorCommand = new DelegateCommand(EditAuthor, CanEditAuthor);
+            DeleteAuthorCommand = new DelegateCommand(DeleteAuthor, CanDeleteAuthor);
         }
 
         public ObservableCollection<AuthorRowViewModel> AuthorRows { get; private set; }
@@ -38,11 +44,6 @@ namespace BookstoreApp.ViewModel
             }
         }
 
-        private async void Load()
-        {
-            await LoadAuthorRowsAsync();
-        }
-
         public async Task LoadAuthorRowsAsync()
         {
 
@@ -60,20 +61,57 @@ namespace BookstoreApp.ViewModel
             }
         }
 
-        public async void NewAuthor(object? args)
+        public async void NewAuthorAsync(object? args)
         {
-            //öppna dialogruta
-            //om ny författare sparas i dialog = lägg till i databas annars bara stäng ner
-            //ladda authorrow igen?
+            var vm = new AuthorDetailViewModel();
+
+            var dialog = new AddEditAuthorWindow
+            {
+                DataContext = vm
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                await LoadAuthorRowsAsync();
+            }
         }
 
         public async void DeleteAuthor(object? args)
         {
-            //finns en author vald?
-            //finns det böcker med denna författare? i så fall informera och avbryt borttagning
-            //be användaren bekräfta borttagning
-            //om användaren bekräftade så ta bort författare
-            //ladda authorrow igen
+            if (SelectedAuthorRow is null) return;
+
+            using var db = new BookstoreContext();
+
+            var author = await db.Authors
+                .Include(a => a.Isbns)
+                .FirstAsync(a => a.AuthorId == SelectedAuthorRow.AuthorId);
+
+            if (author.Isbns.Count > 0)
+            {
+                var totalBooks = author.Isbns.Count();
+                MessageBox.Show(
+                $"Författaren kan inte tas bort eftersom den är kopplad till {totalBooks} bok/böcker.",
+                "Kan inte ta bort författare",
+                 MessageBoxButton.OK,
+                 MessageBoxImage.Information);
+
+                return;
+            }
+
+            var result = MessageBox.Show(
+                            $"Är du säker på att du vill ta bort \"{SelectedAuthorRow.FullName}\"?\nDetta går inte att ångra.",
+                            "Radera bok",
+                            MessageBoxButton.OKCancel,
+                            MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Cancel)
+                return;
+
+            
+            db.Authors.Remove(author);
+            await db.SaveChangesAsync();
+
+            await LoadAuthorRowsAsync();
         }
 
         public bool CanDeleteAuthor(object? args)
@@ -83,10 +121,27 @@ namespace BookstoreApp.ViewModel
 
         public async void EditAuthor(object? args)
         {
-            //om det finns en author gå vidare
-            //öppna dialogruta med vald författare
-            //spara ändringar om användren sparar
-            //ladda om author rows igen
+            if (SelectedAuthorRow is null) return;
+
+            using var db = new BookstoreContext();
+
+            var author = await db.Authors
+                .FirstAsync(a => a.AuthorId == SelectedAuthorRow.AuthorId);
+
+            if (author == null)
+                return;
+
+            var vm = new AuthorDetailViewModel(author);
+
+            var dialog = new AddEditAuthorWindow
+            {
+                DataContext = vm
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                await LoadAuthorRowsAsync();
+            }
         }
 
         public bool CanEditAuthor(object? args)

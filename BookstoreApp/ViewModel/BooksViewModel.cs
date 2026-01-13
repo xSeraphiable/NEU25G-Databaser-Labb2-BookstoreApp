@@ -107,7 +107,6 @@ namespace BookstoreApp.ViewModel
             await db.SaveChangesAsync();
 
             await LoadBookRowsAsync();
-
         }
 
         public bool CanDeleteBook(object? args)
@@ -141,7 +140,6 @@ namespace BookstoreApp.ViewModel
             {
                 await LoadBookRowsAsync();
             }
-
         }
 
         private bool CanEditBook(object? args)
@@ -149,7 +147,7 @@ namespace BookstoreApp.ViewModel
             return SelectedBookRow != null;
         }
 
-        public async void NewBookAsync(object? args) //TODO: gör klart
+        public async void NewBookAsync(object? args)
         {
             var vm = new BookDetailViewModel();
 
@@ -159,15 +157,13 @@ namespace BookstoreApp.ViewModel
             };
 
             if (dialog.ShowDialog() == true)
-            {
-                //SaveBook(vm);
+            {               
                 await LoadBookRowsAsync();
             }
         }
 
         public async Task LoadBookRowsAsync()
         {
-
             using var db = new BookstoreContext();
 
             var books = await db.Books
@@ -182,7 +178,5 @@ namespace BookstoreApp.ViewModel
                 BookRows.Add(new BookRowViewModel(book));
             }
         }
-
     }
-
 }

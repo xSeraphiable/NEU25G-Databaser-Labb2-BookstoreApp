@@ -39,10 +39,12 @@ namespace BookstoreApp.ViewModel
 
         private void ShowAuthors(object? args)
         {
+            AuthorsViewModel.SelectedAuthorRow = null;
             CurrentView = AuthorsViewModel;
         }
         private void ShowBooks(object? args)
         {
+            BooksViewModel.SelectedBookRow = null;
             CurrentView = BooksViewModel;
         }
 

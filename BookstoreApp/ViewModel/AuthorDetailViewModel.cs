@@ -50,6 +50,8 @@ namespace BookstoreApp.ViewModel
 
             Author author;
 
+            if (HasErrors) return;
+
             if (IsNew)
             {
                 author = new Author();
@@ -116,8 +118,39 @@ namespace BookstoreApp.ViewModel
                 OnChanged();
             }
         }
-        public string this[string columnName] => throw new NotImplementedException();
 
-        public string Error => throw new NotImplementedException();
+        private bool HasErrors =>
+    !string.IsNullOrEmpty(this[nameof(FirstName)]) ||
+    !string.IsNullOrEmpty(this[nameof(Surname)]) ||
+    !string.IsNullOrEmpty(this[nameof(DateOfBirth)]);
+        public string this[string columnName] => Validate(columnName);
+        public string Error => string.Empty;
+
+        private string Validate(string propertyName)
+        {
+            switch (propertyName)
+            {
+                case nameof(FirstName):
+                    if (string.IsNullOrWhiteSpace(FirstName))
+                        return "Förnamn måste anges";
+                    if (FirstName.Length > 100)
+                        return "Förnamn är för långt";
+                    break;
+
+                case nameof(Surname):
+                    if (string.IsNullOrWhiteSpace(Surname))
+                        return "Efternamn måste anges";
+                    if (Surname.Length > 100)
+                        return "Efternamn är för långt";
+                    break;
+
+                case nameof(DateOfBirth):
+                    if (DateOfBirth.HasValue && DateOfBirth > DateOnly.FromDateTime(DateTime.Today))
+                        return "Födelsedatum kan inte ligga i framtiden";
+                    break;
+            }
+
+            return string.Empty;
+        }
     }
 }

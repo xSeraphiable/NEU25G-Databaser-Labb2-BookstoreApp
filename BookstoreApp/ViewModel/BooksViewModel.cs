@@ -54,7 +54,6 @@ namespace BookstoreApp.ViewModel
         }
 
 
-
         public async void DeleteBookAsync(object? args)
         {
             if (SelectedBookRow is null)

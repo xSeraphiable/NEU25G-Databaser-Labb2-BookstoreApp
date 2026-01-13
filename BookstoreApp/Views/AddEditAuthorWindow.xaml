@@ -6,7 +6,75 @@
         xmlns:local="clr-namespace:BookstoreApp.Views"
         mc:Ignorable="d"
         Title="AddEditAuthorWindow" Height="450" Width="800">
-    <Grid>
-        
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Förnamn -->
+        <TextBlock Text="Förnamn"
+                   Grid.Row="0"
+                   Grid.Column="0"
+                   VerticalAlignment="Center"/>
+
+        <TextBox Grid.Row="0"
+                 Grid.Column="1"
+                 Margin="0,0,0,8"
+                 Text="{Binding FirstName,
+                                UpdateSourceTrigger=PropertyChanged,
+                                ValidatesOnDataErrors=True}"
+                 FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"/>
+
+        <!-- Efternamn -->
+        <TextBlock Text="Efternamn"
+                   Grid.Row="1"
+                   Grid.Column="0"
+                   VerticalAlignment="Center"/>
+
+        <TextBox Grid.Row="1"
+                 Grid.Column="1"
+                 Margin="0,0,0,8"
+                 Text="{Binding Surname,
+                                UpdateSourceTrigger=PropertyChanged,
+                                ValidatesOnDataErrors=True}"/>
+
+        <!-- Födelsedatum -->
+        <TextBlock Text="Födelsedatum"
+                   Grid.Row="2"
+                   Grid.Column="0"
+                   VerticalAlignment="Center"/>
+
+        <DatePicker Grid.Row="2"
+                    Grid.Column="1"
+                    Margin="0,0,0,16"
+                    SelectedDate="{Binding DateOfBirth,
+                                           UpdateSourceTrigger=PropertyChanged,
+                                           ValidatesOnDataErrors=True, 
+                                           Converter={StaticResource DateOnlyConverter}}"/>
+
+        <!-- Knappar -->
+        <StackPanel Grid.Row="3"
+                    Grid.ColumnSpan="2"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="0,12,0,0">
+
+            <Button Content="Spara"
+                    Margin="0,0,6,0"
+                    IsDefault="True"
+                    Command="{Binding SaveAuthorCommand}"/>
+
+            <Button Content="Avbryt"
+   
+                    IsCancel="True"/>
+        </StackPanel>
     </Grid>
 </Window>

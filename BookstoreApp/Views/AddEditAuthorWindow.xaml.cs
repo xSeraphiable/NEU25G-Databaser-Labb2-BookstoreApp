@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BookstoreApp.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,19 @@ namespace BookstoreApp.Views
         public AddEditAuthorWindow()
         {
             InitializeComponent();
+            Loaded += AddEditAuthorWindow_Loaded;
+        }
+
+        private void AddEditAuthorWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is AuthorDetailViewModel vm)
+            {
+                vm.RequestClose += result =>
+                {
+                    DialogResult = result;
+                    Close();
+                };
+            }
         }
     }
 }

@@ -24,6 +24,11 @@ namespace BookstoreApp.ViewModel
 
         public int BookCount => Author.Isbns.Count;
 
+        public string BookTitlesText =>
+    Author.Isbns.Any()
+        ? string.Join(", ", Author.Isbns.Select(b => b.Title))
+        : "Inga böcker";
+
         private bool _isSelected;
         public bool IsSelected
         {

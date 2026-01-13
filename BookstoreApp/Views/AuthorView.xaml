@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              xmlns:local="clr-namespace:BookstoreApp.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -60,10 +61,44 @@
                                  Binding="{Binding DateOfBirth,
                                            StringFormat={}{0:yyyy-MM-dd}}"
                                  Width="*"/>
-                <DataGridTextColumn Header="Antal böcker"
+
+                <DataGridTextColumn Binding="{Binding BookCount}">
+                    <DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Antal böcker"/>
+
+                            <fa:IconBlock Icon="InfoCircle"
+                                          Width="12"
+                                          Height="12"
+                                          Margin="2,0,0,0"
+                                          Foreground="Blue"
+                                          Cursor="Help"
+                                          ToolTip="Håll muspekaren över antalet för att se boktitlar"/>
+                        </StackPanel>
+                    </DataGridTextColumn.Header>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="ToolTip"
+        Value="{Binding BookTitlesText}" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <!--<DataGridTextColumn Header="Antal böcker"
                                  Binding="{Binding BookCount}"
-                                 Width="*"/>
+                                 Width="*"
+                                    
+                                    >
+                    
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="ToolTip"
+                    Value="{Binding BookTitlesText}" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>-->
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
+
 </UserControl>

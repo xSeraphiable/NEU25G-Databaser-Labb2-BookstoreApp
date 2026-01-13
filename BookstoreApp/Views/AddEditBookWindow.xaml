@@ -42,14 +42,18 @@
         <TextBox   Grid.Row="0" Grid.Column="1"
                MaxLength="13"
                Text="{Binding Isbn, UpdateSourceTrigger=PropertyChanged,
-                              ValidatesOnDataErrors=True}"/>
+                              ValidatesOnDataErrors=True}"
+                   ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
+                           RelativeSource={RelativeSource Self}}"/>
 
         <!-- Titel -->
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Titel" />
         <TextBox   Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"
                MaxLength="200"
                Text="{Binding Title, UpdateSourceTrigger=PropertyChanged,
-                              ValidatesOnDataErrors=True}"/>
+                              ValidatesOnDataErrors=True}"
+                   ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
+                           RelativeSource={RelativeSource Self}}"/>
 
         <!-- Författare (placeholder) -->
         <TextBlock Grid.Row="2" Grid.Column="0" Text="Författare" />
@@ -92,33 +96,43 @@
         <TextBox   Grid.Row="5" Grid.Column="1"
                Text="{Binding Language,
                               UpdateSourceTrigger=PropertyChanged,
-                              ValidatesOnDataErrors=True}"/>
+                              ValidatesOnDataErrors=True}"
+                   ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
+                           RelativeSource={RelativeSource Self}}"/>
 
         <!-- Antal sidor / Vikt -->
         <TextBlock Grid.Row="6" Grid.Column="0" Text="Antal sidor" />
         <TextBox   Grid.Row="6" Grid.Column="1"
                Text="{Binding NumberOfPages,
                               UpdateSourceTrigger=LostFocus,
-                              ValidatesOnDataErrors=True}"/>
+                              ValidatesOnDataErrors=True}"
+                   ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
+                           RelativeSource={RelativeSource Self}}"/>
 
         <TextBlock Grid.Row="6" Grid.Column="3" Text="Vikt (g)" />
         <TextBox   Grid.Row="6" Grid.Column="4"
                Text="{Binding Weight,
                               UpdateSourceTrigger=PropertyChanged,
-                              ValidatesOnDataErrors=True}"/>
+                              ValidatesOnDataErrors=True}"
+                   ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
+                           RelativeSource={RelativeSource Self}}"/>
 
         <!-- Inköpspris / Försäljningspris -->
         <TextBlock Grid.Row="7" Grid.Column="0" Text="Inköpspris" />
         <TextBox   Grid.Row="7" Grid.Column="1"
                Text="{Binding PurchasePrice,
                               UpdateSourceTrigger=LostFocus,
-                              ValidatesOnDataErrors=True}"/>
+                              ValidatesOnDataErrors=True}"
+                   ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
+                           RelativeSource={RelativeSource Self}}"/>
 
         <TextBlock Grid.Row="7" Grid.Column="3" Text="Försäljningspris" />
         <TextBox   Grid.Row="7" Grid.Column="4"
                Text="{Binding SalesPrice,
                               UpdateSourceTrigger=LostFocus,
-                              ValidatesOnDataErrors=True}"/>
+                              ValidatesOnDataErrors=True}"
+                   ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
+                           RelativeSource={RelativeSource Self}}"/>
 
         <!-- Knappar -->
         <StackPanel Grid.Row="9"
@@ -127,13 +141,14 @@
                 HorizontalAlignment="Right"
                 Margin="0,12,0,0">
 
-            <Button Content="Avbryt"
-                IsCancel="True"
-                Margin="0,0,6,0"/>
-
             <Button Content="Spara"
                 IsDefault="True"
-                Command="{Binding SaveBookCommand}"/>
+                Command="{Binding SaveBookCommand}"
+                    Margin="0,0,6,0"/>
+
+            <Button Content="Avbryt"
+                IsCancel="True"
+                />
         </StackPanel>
     </Grid>
 </Window>

@@ -14,6 +14,41 @@ namespace BookstoreApp.ViewModel
     {
         public ObservableCollection<Store> Stores { get; } = new();
         public DelegateCommand SelectStoreCommand { get; }
+        public DelegateCommand ShowBooksCommand { get; }
+        public DelegateCommand ShowStockCommand { get; }
+        public DelegateCommand ShowAuthorsCommand { get; }
+
+        public MainWindowViewModel()
+        {
+            StockLevelViewModel = new StockLevelViewModel(this);
+            BooksViewModel = new BooksViewModel();
+
+            CurrentView = StockLevelViewModel;
+
+            _ = LoadStoresAsync();
+
+            SelectStoreCommand = new DelegateCommand(SelectStore, CanSelectStore);
+            ShowBooksCommand = new DelegateCommand(ShowBooks);
+            ShowStockCommand = new DelegateCommand(ShowStock);
+            ShowAuthorsCommand = new DelegateCommand(ShowAuthors);
+        }
+        public StockLevelViewModel StockLevelViewModel { get; }
+        public BooksViewModel BooksViewModel { get; }
+        public AuthorViewModel AuthorsViewModel { get; }
+
+        private void ShowAuthors(object? args)
+        {
+            CurrentView = AuthorsViewModel;
+        }
+        private void ShowBooks(object? args)
+        {
+            CurrentView = BooksViewModel;
+        }
+
+        private void ShowStock(object? args)
+        {
+            CurrentView = StockLevelViewModel;
+        }
 
         public bool CanSelectStore(object? args)
         {
@@ -51,18 +86,7 @@ namespace BookstoreApp.ViewModel
             }
         }
 
-        public StockLevelViewModel StockLevelViewModel { get; set; }
-        public BooksViewModel BooksViewModel { get; set; }
 
-        public MainWindowViewModel()
-        {
-            StockLevelViewModel = new StockLevelViewModel(this);
-            BooksViewModel = new BooksViewModel();
-            CurrentView = BooksViewModel;
-            _ = LoadStoresAsync();
-
-            SelectStoreCommand = new DelegateCommand(SelectStore, CanSelectStore);
-        }
         private async Task LoadStoresAsync()
         {
             using var db = new BookstoreContext();

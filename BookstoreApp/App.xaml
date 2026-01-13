@@ -14,7 +14,10 @@
         <DataTemplate DataType="{x:Type vm:BooksViewModel}">
             <views:BooksView />
         </DataTemplate>
-
+        <DataTemplate DataType="{x:Type vm:AuthorsViewModel}">
+            <views:AuthorView/>
+        </DataTemplate>
+        
         <conv:DateOnlyToDateTimeConverter x:Key="DateOnlyConverter"/>
 
 

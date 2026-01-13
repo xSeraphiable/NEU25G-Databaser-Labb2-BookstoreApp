@@ -21,12 +21,12 @@ namespace BookstoreApp.ViewModel
             NewBookCommand = new DelegateCommand(NewBookAsync);
             DeleteBookCommand = new DelegateCommand(DeleteBookAsync, CanDeleteBook);
 
-            Rows = new ObservableCollection<BookRowViewModel>();
+            BookRows = new ObservableCollection<BookRowViewModel>();
 
             Load();
         }
 
-        public ObservableCollection<BookRowViewModel> Rows { get; private set; }
+        public ObservableCollection<BookRowViewModel> BookRows { get; private set; }
 
         public DelegateCommand EditBookCommand { get; }
         public DelegateCommand NewBookCommand { get; }
@@ -175,11 +175,11 @@ namespace BookstoreApp.ViewModel
                 .Include(b => b.Category)
                 .ToListAsync();
 
-            Rows.Clear();
+            BookRows.Clear();
 
             foreach (var book in books)
             {
-                Rows.Add(new BookRowViewModel(book));
+                BookRows.Add(new BookRowViewModel(book));
             }
         }
 

@@ -22,6 +22,8 @@ namespace BookstoreApp.ViewModel
 
         public string FullName => $"{Author.FirstName} {Author.Surname}";
 
+        public int BookCount => Author.Isbns.Count;
+
         private bool _isSelected;
         public bool IsSelected
         {

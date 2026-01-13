@@ -22,6 +22,7 @@ namespace BookstoreApp.ViewModel
         {
             StockLevelViewModel = new StockLevelViewModel(this);
             BooksViewModel = new BooksViewModel();
+            AuthorsViewModel = new AuthorsViewModel();
 
             CurrentView = StockLevelViewModel;
 
@@ -34,7 +35,7 @@ namespace BookstoreApp.ViewModel
         }
         public StockLevelViewModel StockLevelViewModel { get; }
         public BooksViewModel BooksViewModel { get; }
-        public AuthorViewModel AuthorsViewModel { get; }
+        public AuthorsViewModel AuthorsViewModel { get; }
 
         private void ShowAuthors(object? args)
         {

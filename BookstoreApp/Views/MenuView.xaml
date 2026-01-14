@@ -28,7 +28,7 @@
             <MenuItem Header="Avsluta"/>
         </MenuItem>
         <MenuItem Header="Register">
-            <MenuItem Header="Lagersaldo" Command="{Binding ShowStockCommand}"/>
+            <MenuItem Header="Lagersaldo per butik" Command="{Binding ShowStockCommand}"/>
             <MenuItem Header="Böcker" Command="{Binding ShowBooksCommand}"/>
             <MenuItem Header="Författare" Command="{Binding ShowAuthorsCommand}"/>
         </MenuItem>

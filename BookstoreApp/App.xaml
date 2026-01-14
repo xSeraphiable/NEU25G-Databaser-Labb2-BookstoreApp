@@ -18,7 +18,10 @@
             <views:AuthorView/>
         </DataTemplate>
         
+        
         <conv:DateOnlyToDateTimeConverter x:Key="DateOnlyConverter"/>
+        <conv:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+        <conv:NullToVisibilityInverseConverter x:Key="NullToVisibilityInverseConverter"/>
 
 
 

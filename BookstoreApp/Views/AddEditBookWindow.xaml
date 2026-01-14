@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BookstoreApp.Views"
         mc:Ignorable="d"
-        Title="AddEditBookWindow" Height="450" Width="500">
+        Title="AddEditBookWindow" SizeToContent="Height"  Width="500"
+        WindowStartupLocation="CenterScreen">
     <Grid Margin="12">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

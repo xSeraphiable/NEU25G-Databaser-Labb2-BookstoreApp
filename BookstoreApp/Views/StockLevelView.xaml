@@ -26,7 +26,9 @@
                Text="Vald butik:"
                FontWeight="SemiBold"
                VerticalAlignment="Center"
-               Margin="0,0,8,0"/>
+               Margin="0,0,8,0"
+                       Visibility="{Binding SelectedStore,
+                   Converter={StaticResource NullToVisibilityConverter}}"/>
 
             <!-- StoreId -->
             <TextBlock Grid.Column="1"
@@ -54,6 +56,8 @@
                   ItemsSource="{Binding StockLevel}"
                   SelectedItem="{Binding SelectedRow}" 
                   Margin="10"
+                  Visibility="{Binding SelectedStore,
+                   Converter={StaticResource NullToVisibilityConverter}}"
                  >  
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ISBN" 
@@ -144,5 +148,25 @@
             </DataGrid.Columns>   
         </DataGrid>
             
+        
+    <StackPanel Visibility="{Binding SelectedStore,
+                         Converter={StaticResource NullToVisibilityInverseConverter}}"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+                Grid.Row="1">
+
+        <TextBlock Text="Ingen butik vald"
+               FontSize="18"
+               FontWeight="SemiBold"
+               HorizontalAlignment="Center"/>
+
+        <TextBlock Text="Välj en butik i menyn för att visa lagersaldo."
+               Foreground="Gray"
+               Margin="0,8,0,0"
+               HorizontalAlignment="Center"/>
+    </StackPanel>
     </Grid>
+
+   
+    
 </UserControl>

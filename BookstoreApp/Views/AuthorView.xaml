@@ -14,29 +14,32 @@
         </Grid.RowDefinitions>
 
         <!-- Toolbar -->
-        <Grid Grid.Row="0" Margin="10" HorizontalAlignment="Right">
+        <Grid Grid.Row="0" Margin="10" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-     
-            <StackPanel Orientation="Horizontal" >
-                <Button Grid.Column="0"
-     Content="Ny författare"
-     Command="{Binding NewAuthorCommand}"
-     Margin="0,0,6,0"/>
-
-                <Button Grid.Column="1"
-     Content="Redigera"
-     Command="{Binding EditAuthorCommand}"
-     Margin="0,0,6,0"/>
-
+            <TextBlock Text="Författarregister" 
+                       Grid.Column="0"
+                       FontWeight="SemiBold"/>
+           
                 <Button Grid.Column="2"
-     Content="Ta bort"
-     Command="{Binding DeleteAuthorCommand}"/>
-            </StackPanel>
+                         Content="Ny författare"
+                         Command="{Binding NewAuthorCommand}"
+                         Margin="0,0,6,0"/>
+
+                <Button Grid.Column="3"
+                         Content="Redigera"
+                         Command="{Binding EditAuthorCommand}"
+                         Margin="0,0,6,0"/>
+
+                <Button Grid.Column="4"
+                         Content="Ta bort"
+                         Command="{Binding DeleteAuthorCommand}"/>
+                             
             
         </Grid>
 
@@ -75,7 +78,7 @@
                                           Cursor="Help"
                                           ToolTip="Håll muspekaren över antalet för att se boktitlar"/>
                         </StackPanel>
-                    </DataGridTextColumn.Header>
+                    </DataGridTextColumn.Header>                    
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="ToolTip"

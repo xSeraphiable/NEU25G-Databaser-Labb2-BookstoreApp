@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              >
-    <!--Placeholder meny. Gör om med commands/bindings och korrekt innehåll.-->
+
     <Menu>
         <MenuItem Header="Start">
             <MenuItem Header="Byt butik"
@@ -24,7 +24,7 @@
                 </MenuItem.ItemContainerStyle>
 
             </MenuItem>
-            <!-- lägg ev till Command="{Binding ShowLoginCommand}" -->
+
             <MenuItem Header="Avsluta"/>
         </MenuItem>
         <MenuItem Header="Register">

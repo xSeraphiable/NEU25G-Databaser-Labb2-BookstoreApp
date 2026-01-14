@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              xmlns:local="clr-namespace:BookstoreApp.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -64,36 +65,64 @@
                 <DataGridTextColumn Header="Författare" 
                                     Binding="{Binding Author}"
                                     IsReadOnly="True"/>
-                <DataGridTextColumn Header="I lager"
+                <DataGridTextColumn 
                                     Binding="{Binding Quantity,
                                               Mode=TwoWay,
                                               UpdateSourceTrigger=LostFocus,
                                               ValidatesOnDataErrors=True,
                                               NotifyOnValidationError=True}">
+                    <DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="I lager"/>
 
-                                    <DataGridTextColumn.EditingElementStyle>
-                                        <Style TargetType="TextBox">
-                                            <Style.Triggers>
-                                                <Trigger Property="Validation.HasError" Value="True">
-                                                    <Setter Property="ToolTip"
+                            <fa:IconBlock Icon="InfoCircle"
+                       Width="12"
+                       Height="12"
+                       Margin="2,0,0,0"
+                       Foreground="Blue"
+                       Cursor="Help"
+                       ToolTip="Dubbelklicka på en cell för att redigera saldo."/>
+                        </StackPanel>
+                    </DataGridTextColumn.Header>
+
+                    <DataGridTextColumn.EditingElementStyle>
+                        <Style TargetType="TextBox">
+                            <Style.Triggers>
+                                <Trigger Property="Validation.HasError" Value="True">
+                                    <Setter Property="ToolTip"
                                                 Value="{Binding RelativeSource={RelativeSource Self},
                                                         Path=(Validation.Errors)[0].ErrorContent,
                                                         FallbackValue={x:Null},
                                                         TargetNullValue={x:Null}}" />
-                                                </Trigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </DataGridTextColumn.EditingElementStyle>   
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.EditingElementStyle>
+
+
                 </DataGridTextColumn>
 
-                <DataGridTextColumn Header="Antal beställda"
+                <DataGridTextColumn 
                                     Binding="{Binding QuantityOrdered,
                                                       Mode=TwoWay,
                                                       UpdateSourceTrigger=LostFocus,
                                                       ValidatesOnDataErrors=True,
                                                       NotifyOnValidationError=True}">
+                    <DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Antal beställda"/>
 
-                                        <DataGridTextColumn.EditingElementStyle>
+                            <fa:IconBlock Icon="InfoCircle"
+                       Width="12"
+                       Height="12"
+                       Margin="2,0,0,0"
+                       Foreground="Blue"
+                       Cursor="Help"
+                       ToolTip="Dubbelklicka på en cell för att redigera saldo."/>
+                        </StackPanel>
+                    </DataGridTextColumn.Header>
+
+                    <DataGridTextColumn.EditingElementStyle>
                                             <Style TargetType="TextBox">
                                                 <Style.Triggers>
                                                     <Trigger Property="Validation.HasError" Value="True">

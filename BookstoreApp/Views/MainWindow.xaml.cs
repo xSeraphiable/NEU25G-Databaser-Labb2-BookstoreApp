@@ -1,4 +1,5 @@
 ﻿using BookstoreApp.ViewModel;
+using BookstoreApp.Views;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,7 +22,15 @@ namespace BookstoreApp
         {
             InitializeComponent();
 
-            DataContext = new MainWindowViewModel();
+            var vm = new MainWindowViewModel();
+            DataContext = vm;
+
+            var dialog = new SelectStoreWindow
+            {
+                DataContext = vm
+            };
+
+            dialog.ShowDialog();
         }
     }
 }

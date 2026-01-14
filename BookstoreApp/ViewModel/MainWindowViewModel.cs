@@ -37,7 +37,7 @@ namespace BookstoreApp.ViewModel
         public BooksViewModel BooksViewModel { get; }
         public AuthorsViewModel AuthorsViewModel { get; }
 
-        public bool HasSelectedStore => SelectedStore != null;
+       
         private void ShowAuthors(object? args)
         {
             AuthorsViewModel.SelectedAuthorRow = null;
@@ -75,7 +75,7 @@ namespace BookstoreApp.ViewModel
             {
                 _selectedStore = value;
                 RaisePropertyChanged();
-                RaisePropertyChanged(nameof(HasSelectedStore));
+                
             }
         }
 

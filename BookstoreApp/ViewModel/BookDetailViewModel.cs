@@ -102,7 +102,7 @@ namespace BookstoreApp.ViewModel
 
             foreach (var authorVm in Authors.Where(a => a.IsSelected))
             {
-                book.Authors.Add(authorVm.Author);
+                book.Authors.Add(authorVm.Author); //TODO: Kolla upp om författare laddas rätt vid ny bok
             }
 
             await db.SaveChangesAsync();
@@ -124,7 +124,7 @@ namespace BookstoreApp.ViewModel
             {
                 var vm = new AuthorRowViewModel(author);
 
-                if (!IsNew && _initialAuthors != null)
+                if (!IsNew && _initialAuthors != null) 
                 {
                     vm.IsSelected = _initialAuthors
                         .Any(a => a.AuthorId == author.AuthorId);

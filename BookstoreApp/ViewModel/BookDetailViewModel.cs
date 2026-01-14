@@ -98,11 +98,19 @@ namespace BookstoreApp.ViewModel
             book.NumberOfPages = NumberOfPages;
             book.CategoryId = Category.CategoryId;
 
-            book.Authors.Clear();
+            var authorIds = Authors
+                .Where(a => a.IsSelected)
+                .Select(a => a.Author.AuthorId)
+                .ToList();
 
-            foreach (var authorVm in Authors.Where(a => a.IsSelected))
+            var authors = await db.Authors
+                .Where(a => authorIds.Contains(a.AuthorId))
+                .ToListAsync();
+
+            book.Authors.Clear();
+            foreach (var author in authors)
             {
-                book.Authors.Add(authorVm.Author); //TODO: Kolla upp om författare laddas rätt vid ny bok
+                book.Authors.Add(author);
             }
 
             await db.SaveChangesAsync();

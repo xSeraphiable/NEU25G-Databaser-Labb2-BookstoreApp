@@ -21,14 +21,15 @@ namespace BookstoreApp.ViewModel
                 _selectedStore = value;
                 RaisePropertyChanged();
                 RaisePropertyChanged(nameof(HasSelectedStore));
+
             }
         }
-
         public bool HasSelectedStore => SelectedStore != null;
+       
         public SelectStoreViewModel(IEnumerable<Store> stores, Store? currentStore)
         {
             Stores = new ObservableCollection<Store>(stores);
-            SelectedStore = currentStore; 
+            SelectedStore = currentStore; //TODO: behöver jag detta?
         }
     }
 }

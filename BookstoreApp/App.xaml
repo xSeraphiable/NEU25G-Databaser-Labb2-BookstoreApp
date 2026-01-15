@@ -5,8 +5,10 @@
              xmlns:views="clr-namespace:BookstoreApp.Views"
              xmlns:conv="clr-namespace:BookstoreApp.Converters"
              xmlns:vm="clr-namespace:BookstoreApp.ViewModel"
-             StartupUri="Views/MainWindow.xaml">
+             StartupUri="Views/MainWindow.xaml"
+>
     <Application.Resources>
+        
 
         <DataTemplate DataType="{x:Type vm:StockLevelViewModel}">
             <views:StockLevelView />

@@ -26,7 +26,7 @@ namespace BookstoreApp.Views
 
         private void OK_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            DialogResult = true;
         }
 
 

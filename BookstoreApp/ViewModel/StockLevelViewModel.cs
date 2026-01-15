@@ -19,6 +19,22 @@ namespace BookstoreApp.ViewModel
         public DelegateCommand SaveStockLevelCommand { get; }
         public DelegateCommand CancelChangesCommand { get; }
 
+        public StockLevelViewModel()
+        {
+            //_mainWindowViewModel = mainWindowViewModel; //plocka bort?
+
+            SaveStockLevelCommand = new DelegateCommand(SaveStock, CanSaveStock);
+
+            //_mainWindowViewModel.PropertyChanged += async (_, e) =>
+            //{
+            //    if (e.PropertyName == nameof(MainWindowViewModel.SelectedStore))
+            //    {
+            //        RaisePropertyChanged(nameof(SelectedStore));
+            //        await LoadStockLevelsAsync();
+            //    }
+            //};
+
+        }
 
         public async void SaveStock(object? args)
         {
@@ -57,29 +73,22 @@ namespace BookstoreApp.ViewModel
 
         }
 
-        public StockLevelViewModel(MainWindowViewModel mainWindowViewModel)
-        {
-            _mainWindowViewModel = mainWindowViewModel;
 
-            SaveStockLevelCommand = new DelegateCommand(SaveStock, CanSaveStock);
+        //public ObservableCollection<Store> Stores => _mainWindowViewModel.Stores; //TODO: plocka bort?
+        public ObservableCollection<StockLevelRowViewModel> StockLevel { get; } = new();
 
-            _mainWindowViewModel.PropertyChanged += async (_, e) =>
-            {
-                if (e.PropertyName == nameof(MainWindowViewModel.SelectedStore))
-                {
-                    RaisePropertyChanged(nameof(SelectedStore));
-                    await LoadStockLevelAsync();
-                }
-            };
-
-        }
-
-        public ObservableCollection<Store> Stores => _mainWindowViewModel.Stores;
-
+        private Store? _selectedStore;
         public Store? SelectedStore
         {
-            get => _mainWindowViewModel.SelectedStore;
+            get => _selectedStore;
+            set
+            {
+                _selectedStore = value;
+                RaisePropertyChanged();
 
+                if (_selectedStore != null)
+                    _ = LoadStockLevelsAsync();
+            }
         }
 
         private StockLevelRowViewModel _selectedRow;
@@ -93,9 +102,8 @@ namespace BookstoreApp.ViewModel
             }
         }
 
-        public ObservableCollection<StockLevelRowViewModel> StockLevel { get; } = new();
 
-        public async Task LoadStockLevelAsync()
+        public async Task LoadStockLevelsAsync()
         {
             StockLevel.Clear();
 

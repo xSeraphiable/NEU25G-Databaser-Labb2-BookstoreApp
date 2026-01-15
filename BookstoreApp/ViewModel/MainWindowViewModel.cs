@@ -20,13 +20,11 @@ namespace BookstoreApp.ViewModel
 
         public MainWindowViewModel()
         {
-            StockLevelViewModel = new StockLevelViewModel(this);
+            StockLevelViewModel = new StockLevelViewModel();
             BooksViewModel = new BooksViewModel();
             AuthorsViewModel = new AuthorsViewModel();
 
             CurrentView = StockLevelViewModel;
-
-            _ = LoadStoresAsync();
 
             SelectStoreCommand = new DelegateCommand(SelectStore, CanSelectStore);
             ShowBooksCommand = new DelegateCommand(ShowBooks);
@@ -75,7 +73,9 @@ namespace BookstoreApp.ViewModel
             {
                 _selectedStore = value;
                 RaisePropertyChanged();
-                
+               
+                StockLevelViewModel.SelectedStore = value;
+
             }
         }
 
@@ -92,7 +92,7 @@ namespace BookstoreApp.ViewModel
         }
 
 
-        private async Task LoadStoresAsync()
+        internal async Task LoadStoresAsync()
         {
             using var db = new BookstoreContext();
 

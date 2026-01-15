@@ -9,6 +9,7 @@ using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace BookstoreApp.ViewModel
 {
@@ -17,14 +18,14 @@ namespace BookstoreApp.ViewModel
         private readonly MainWindowViewModel? _mainWindowViewModel;
 
         public DelegateCommand SaveStockLevelCommand { get; }
-        public DelegateCommand CancelChangesCommand { get; }
-
+        public DelegateCommand CancelStockLevelCommand { get; }
+        public DelegateCommand CancelStockChangesCommand { get; }
         public StockLevelViewModel()
         {
             //_mainWindowViewModel = mainWindowViewModel; //plocka bort?
 
             SaveStockLevelCommand = new DelegateCommand(SaveStock, CanSaveStock);
-
+            CancelStockLevelCommand = new DelegateCommand(CancelChanges, CanCancel);
             //_mainWindowViewModel.PropertyChanged += async (_, e) =>
             //{
             //    if (e.PropertyName == nameof(MainWindowViewModel.SelectedStore))
@@ -35,11 +36,29 @@ namespace BookstoreApp.ViewModel
             //};
 
         }
-
+        private void CancelChanges(object? args)
+        {
+            foreach (var row in StockLevel)
+                row.Reset();
+        }
+        private bool CanCancel(object? args)
+        {
+            return StockLevel.Any(r => r.IsModified);
+        }
         public async void SaveStock(object? args)
         {
             if (SelectedStore is null)
                 return;
+
+            if (StockLevel.Any(r => r.HasErrors))
+            {
+                MessageBox.Show(
+                    "Det finns ogiltiga värden. Kontrollera lagersaldot innan du sparar.",
+                    "Kan inte spara",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+                return;
+            }
 
             var modifiedRows = StockLevel.Where(r => r.IsModified).ToList();
             if (!modifiedRows.Any())
@@ -59,17 +78,18 @@ namespace BookstoreApp.ViewModel
 
             await db.SaveChangesAsync();
 
-            foreach (var row in modifiedRows)
-                row.AcceptChanges();
+            //foreach (var row in modifiedRows)
+            //    row.AcceptChanges();
 
             SaveStockLevelCommand.RaiseCanExecuteChanged();
         }
 
         public bool CanSaveStock(object? args)
         {
-            return StockLevel.Any(r =>
-         r.IsModified &&
-         !r.HasErrors);
+            //   return StockLevel.Any(r =>
+            //r.IsModified &&
+            //!r.HasErrors);
+            return StockLevel.Any(r => r.IsModified);
 
         }
 
@@ -107,6 +127,7 @@ namespace BookstoreApp.ViewModel
         {
             StockLevel.Clear();
 
+
             if (SelectedStore is null)
                 return;
 
@@ -128,8 +149,13 @@ namespace BookstoreApp.ViewModel
 
             foreach (var item in items)
             {
-                item.OnModifiedChanged =
-                    () => SaveStockLevelCommand.RaiseCanExecuteChanged();
+                //item.OnModifiedChanged =
+                //    () => SaveStockLevelCommand.RaiseCanExecuteChanged();
+                item.OnModifiedChanged = () =>
+                {
+                    SaveStockLevelCommand.RaiseCanExecuteChanged();
+                    CancelStockLevelCommand.RaiseCanExecuteChanged();
+                };
 
                 StockLevel.Add(item);
             }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BookstoreApp.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -11,8 +12,11 @@ namespace BookstoreApp.ViewModel
     {
         public string Isbn { get; }
         public string Title { get; }
-        public string Author { get; }
+        public string Authors { get; }
         public decimal SalesPrice { get; }
+
+        public int OriginalQuantity { get; }
+        public int OriginalQuantityOrdered { get; }
 
         private int _quantity;
         public int Quantity
@@ -20,9 +24,13 @@ namespace BookstoreApp.ViewModel
             get => _quantity;
             set
             {
+                if (_quantity == value) return;
+
                 _quantity = value;
-                IsModified = true;
+                //IsModified = true;
                 RaisePropertyChanged();
+                RaisePropertyChanged(nameof(IsModified));
+                OnModifiedChanged?.Invoke();
             }
         }
 
@@ -32,40 +40,55 @@ namespace BookstoreApp.ViewModel
             get => _quantityOrdered;
             set
             {
-                _quantityOrdered = value;
-                IsModified = true;
-                RaisePropertyChanged();
-            }
-        }
+                if(_quantityOrdered == value) return;
 
-        private bool _isModified;
-        public bool IsModified
-        {
-            get => _isModified;
-            set
-            {
-                _isModified = value;
+                _quantityOrdered = value;
+                //IsModified = true;
                 RaisePropertyChanged();
+                RaisePropertyChanged(nameof(IsModified));
                 OnModifiedChanged?.Invoke();
             }
         }
 
+        public bool IsModified =>
+        Quantity != OriginalQuantity ||
+        QuantityOrdered != OriginalQuantityOrdered;
+        //private bool _isModified;
+        //public bool IsModified
+        //{
+        //    get => _isModified;
+        //    set
+        //    {
+        //        _isModified = value;
+        //        RaisePropertyChanged();
+        //        OnModifiedChanged?.Invoke();
+        //    }
+        //}
+        public void Reset()
+        {
+            Quantity = OriginalQuantity;
+            QuantityOrdered = OriginalQuantityOrdered;
+        }
         public StockLevelRowViewModel(
             string isbn,
             string title,
-            string author,
+            string authors,
             int quantity,
             int quantityOrdered,
             decimal salesPrice)
         {
             Isbn = isbn;
             Title = title;
-            Author = author;
-            Quantity = quantity;
-            QuantityOrdered = quantityOrdered;
+            Authors = authors;
             SalesPrice = salesPrice;
-        }
 
+            OriginalQuantity = quantity;
+            OriginalQuantityOrdered = quantityOrdered;
+
+            _quantity = quantity;
+            _quantityOrdered = quantityOrdered;
+        }
+        
         public Action? OnModifiedChanged { get; set; }
         public bool HasErrors =>
     !string.IsNullOrEmpty(this[nameof(Quantity)]) ||
@@ -99,10 +122,10 @@ namespace BookstoreApp.ViewModel
             }
         }
 
-        public void AcceptChanges()
-        {
-            IsModified = false;
-        }
+        //public void AcceptChanges() //TODO: följ upp
+        //{
+        //    //IsModified = false;
+        //}
     }
 
 }

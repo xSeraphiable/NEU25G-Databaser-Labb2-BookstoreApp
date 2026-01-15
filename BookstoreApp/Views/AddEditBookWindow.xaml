@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BookstoreApp.Views"
         mc:Ignorable="d"
-        Title="AddEditBookWindow" SizeToContent="Height"  Width="500"
+        Title="Lägg till eller redigera bok" SizeToContent="Height"  Width="500"
         WindowStartupLocation="CenterScreen">
     <Grid Margin="12">
         <Grid.RowDefinitions>
@@ -42,7 +42,7 @@
         <TextBlock Grid.Row="0" Grid.Column="0" Text="ISBN" />
         <TextBox   Grid.Row="0" Grid.Column="1"
                MaxLength="13"
-               Text="{Binding Isbn, UpdateSourceTrigger=PropertyChanged,
+               Text="{Binding Isbn, UpdateSourceTrigger=LostFocus,
                               ValidatesOnDataErrors=True}"
                    ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
                            RelativeSource={RelativeSource Self}}"/>
@@ -51,7 +51,7 @@
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Titel" />
         <TextBox   Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"
                MaxLength="200"
-               Text="{Binding Title, UpdateSourceTrigger=PropertyChanged,
+               Text="{Binding Title, UpdateSourceTrigger=LostFocus,
                               ValidatesOnDataErrors=True}"
                    ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
                            RelativeSource={RelativeSource Self}}"/>

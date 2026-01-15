@@ -113,6 +113,9 @@ namespace BookstoreApp.ViewModel
                 book.Authors.Add(author);
             }
 
+            if (!string.IsNullOrEmpty(this[nameof(Isbn)]))
+                return;
+
             await db.SaveChangesAsync();
 
             RequestClose?.Invoke(true);
@@ -243,15 +246,16 @@ namespace BookstoreApp.ViewModel
 
         private void OnChanged([CallerMemberName] string? name = null)
         {
+    
             IsModified = true;
             RaisePropertyChanged(name);
-            RaisePropertyChanged(nameof(IsModified));
+
+
         }
 
         // === State ===
         public bool IsNew { get; }
         public bool IsModified { get; private set; }
-
 
 
 
@@ -262,6 +266,8 @@ namespace BookstoreApp.ViewModel
 
         private string Validate(string propertyName)
         {
+
+
             switch (propertyName)
             {
                 case nameof(Isbn):
@@ -276,6 +282,14 @@ namespace BookstoreApp.ViewModel
                     if (!Isbn.All(char.IsDigit))
                     {
                         return "ISBN får endast innehålla siffror";
+                    }
+                    if (IsNew)
+                    {
+                        using var db = new BookstoreContext();
+                        bool exists = db.Books.Any(b => b.Isbn == Isbn);
+
+                        if (exists)
+                            return "Det finns redan en bok med detta ISBN";
                     }
                     break;
                 case nameof(Title):

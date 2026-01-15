@@ -58,12 +58,24 @@
 
                 <DataGridTextColumn Header="Pris"
                                     Binding="{Binding Price}"
-                                    Width="*"/>
+                                    Width="*">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
 
                 <DataGridTextColumn Header="Utgiven"
                                     Binding="{Binding ReleaseDate,
                                               StringFormat={}{0:yyyy-MM-dd}}"
-                                    Width="*"/>
+                                    Width="*">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
                 <DataGridTextColumn Header="Författare"
                                     Binding="{Binding AuthorsText}"
                                     Width="*"/>

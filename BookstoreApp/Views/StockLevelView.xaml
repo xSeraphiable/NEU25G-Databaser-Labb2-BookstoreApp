@@ -79,15 +79,20 @@
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="I lager"/>
 
-                            <fa:IconBlock Icon="InfoCircle"
+                            <fa:IconBlock Icon="Edit"
                        Width="12"
                        Height="12"
                        Margin="2,0,0,0"
                        Foreground="Blue"
                        Cursor="Help"
-                       ToolTip="Dubbelklicka på en cell för att redigera saldo."/>
+                       ToolTip="Klicka på en cell för att redigera saldo."/>
                         </StackPanel>
                     </DataGridTextColumn.Header>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
 
                     <DataGridTextColumn.EditingElementStyle>
                         <Style TargetType="TextBox">
@@ -98,6 +103,7 @@
                                                         Path=(Validation.Errors)[0].ErrorContent,
                                                         FallbackValue={x:Null},
                                                         TargetNullValue={x:Null}}" />
+                                    
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
@@ -116,15 +122,20 @@
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Antal beställda"/>
 
-                            <fa:IconBlock Icon="InfoCircle"
+                            <fa:IconBlock Icon="Edit"
                        Width="12"
                        Height="12"
                        Margin="2,0,0,0"
                        Foreground="Blue"
                        Cursor="Help"
-                       ToolTip="Dubbelklicka på en cell för att redigera saldo."/>
+                       ToolTip="Klicka på en cell för att redigera saldo."/>
                         </StackPanel>
                     </DataGridTextColumn.Header>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
 
                     <DataGridTextColumn.EditingElementStyle>
                                             <Style TargetType="TextBox">
@@ -143,7 +154,13 @@
 
                 <DataGridTextColumn Header="Försäljningspris" 
                     Binding="{Binding SalesPrice}"
-                    IsReadOnly="True"/>
+                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
                 
             </DataGrid.Columns>   
         </DataGrid>

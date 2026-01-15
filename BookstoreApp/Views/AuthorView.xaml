@@ -63,7 +63,13 @@
                 <DataGridTextColumn Header="Födelsedatum"
                                  Binding="{Binding DateOfBirth,
                                            StringFormat={}{0:yyyy-MM-dd}}"
-                                 Width="*"/>
+                                 Width="*">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
 
                 <DataGridTextColumn Binding="{Binding BookCount}">
                     <DataGridTextColumn.Header>
@@ -78,11 +84,13 @@
                                           Cursor="Help"
                                           ToolTip="Håll muspekaren över antalet för att se boktitlar"/>
                         </StackPanel>
-                    </DataGridTextColumn.Header>                    
-                    <DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn.Header> 
+                    
+                    <DataGridTextColumn.ElementStyle>             
                         <Style TargetType="TextBlock">
                             <Setter Property="ToolTip"
         Value="{Binding BookTitlesText}" />
+                            <Setter Property="HorizontalAlignment" Value="Right" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>

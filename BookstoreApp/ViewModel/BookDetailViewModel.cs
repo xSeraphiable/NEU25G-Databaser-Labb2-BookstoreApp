@@ -79,11 +79,14 @@ namespace BookstoreApp.ViewModel
             }
             else
             {
-                book = await db.Books
+                var existingBook = await db.Books
+                    .Include(b => b.Authors)
                     .FirstOrDefaultAsync(b => b.Isbn == Isbn);
 
-                if (book == null)
+                if (existingBook == null)
                     return;
+
+                book = existingBook;
             }
 
             if (Category == null)

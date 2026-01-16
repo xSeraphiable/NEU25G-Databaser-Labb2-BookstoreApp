@@ -93,6 +93,8 @@ namespace BookstoreApp.ViewModel
 
         }
 
+        public int ModifiedCount =>
+    StockLevel.Count(r => r.IsModified);
 
         //public ObservableCollection<Store> Stores => _mainWindowViewModel.Stores; //TODO: plocka bort?
         public ObservableCollection<StockLevelRowViewModel> StockLevel { get; } = new();
@@ -155,6 +157,7 @@ namespace BookstoreApp.ViewModel
                 {
                     SaveStockLevelCommand.RaiseCanExecuteChanged();
                     CancelStockLevelCommand.RaiseCanExecuteChanged();
+                    RaisePropertyChanged(nameof(ModifiedCount));
                 };
 
                 StockLevel.Add(item);

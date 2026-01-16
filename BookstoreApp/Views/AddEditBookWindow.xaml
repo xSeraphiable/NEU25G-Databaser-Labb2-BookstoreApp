@@ -34,12 +34,12 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="10"/>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*"/>
+            <!--<ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*"/>-->
         </Grid.ColumnDefinitions>
 
         <!-- ISBN -->
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="ISBN" />
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="ISBN*" />
         <TextBox   Grid.Row="0" Grid.Column="1"
                MaxLength="13"
                Text="{Binding Isbn, UpdateSourceTrigger=LostFocus,
@@ -48,8 +48,8 @@
                            RelativeSource={RelativeSource Self}}"/>
 
         <!-- Titel -->
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="Titel" />
-        <TextBox   Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Titel*" />
+        <TextBox   Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="1"
                MaxLength="200"
                Text="{Binding Title, UpdateSourceTrigger=LostFocus,
                               ValidatesOnDataErrors=True}"
@@ -86,11 +86,11 @@
                SelectedItem="{Binding Category}"
                DisplayMemberPath="Name"/>
 
-        <TextBlock Grid.Row="4" Grid.Column="3" Text="Genre" />
+        <!--<TextBlock Grid.Row="4" Grid.Column="3" Text="Genre" />
         <ComboBox  Grid.Row="4" Grid.Column="4"
                ItemsSource="{Binding Genre}"
                SelectedItem="{Binding Genre}"
-               DisplayMemberPath="Name"/>
+               DisplayMemberPath="Name"/>-->
 
         <!-- Språk -->
         <TextBlock Grid.Row="5" Grid.Column="0" Text="Språk" />
@@ -110,25 +110,25 @@
                    ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
                            RelativeSource={RelativeSource Self}}"/>
 
-        <TextBlock Grid.Row="6" Grid.Column="3" Text="Vikt (g)" />
+        <!--<TextBlock Grid.Row="6" Grid.Column="3" Text="Vikt (g)" />
         <TextBox   Grid.Row="6" Grid.Column="4"
                Text="{Binding Weight,
                               UpdateSourceTrigger=PropertyChanged,
                               ValidatesOnDataErrors=True}"
                    ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
-                           RelativeSource={RelativeSource Self}}"/>
+                           RelativeSource={RelativeSource Self}}"/>-->
 
         <!-- Inköpspris / Försäljningspris -->
-        <TextBlock Grid.Row="7" Grid.Column="0" Text="Inköpspris" />
+        <!--<TextBlock Grid.Row="7" Grid.Column="0" Text="Inköpspris" />
         <TextBox   Grid.Row="7" Grid.Column="1"
                Text="{Binding PurchasePrice,
                               UpdateSourceTrigger=LostFocus,
                               ValidatesOnDataErrors=True}"
                    ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
-                           RelativeSource={RelativeSource Self}}"/>
+                           RelativeSource={RelativeSource Self}}"/>-->
 
-        <TextBlock Grid.Row="7" Grid.Column="3" Text="Försäljningspris" />
-        <TextBox   Grid.Row="7" Grid.Column="4"
+        <TextBlock Grid.Row="7" Grid.Column="0" Text="Försäljningspris" />
+        <TextBox   Grid.Row="7" Grid.Column="1"
                Text="{Binding SalesPrice,
                               UpdateSourceTrigger=LostFocus,
                               ValidatesOnDataErrors=True}"
@@ -137,7 +137,7 @@
 
         <!-- Knappar -->
         <StackPanel Grid.Row="9"
-                Grid.ColumnSpan="5"
+                Grid.ColumnSpan="2"
                 Orientation="Horizontal"
                 HorizontalAlignment="Right"
                 Margin="0,12,0,0">

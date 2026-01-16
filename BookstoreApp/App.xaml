@@ -60,7 +60,7 @@
         </Style>
 
  
-        <Style TargetType="DataGrid">
+        <Style TargetType="DataGrid" >
             <!-- Struktur -->
             <Setter Property="AutoGenerateColumns" Value="False"/>
             <Setter Property="CanUserAddRows" Value="False"/>
@@ -93,9 +93,11 @@
 
 
         <Style TargetType="DataGridCell">
-            <Setter Property="Padding" Value="6,3"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
+ 
 
 
         <Style TargetType="Button">
@@ -108,6 +110,7 @@
             <Setter Property="Foreground" Value="#333"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
 
             <Setter Property="Template">
                 <Setter.Value>
@@ -136,6 +139,34 @@
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
                                 <Setter Property="Opacity" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!--TEST MENY-->
+        <Style x:Key="SideMenuButton" TargetType="Button">
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Padding" Value="10,6"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                        CornerRadius="4">
+                            <ContentPresenter />
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#57606F"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>

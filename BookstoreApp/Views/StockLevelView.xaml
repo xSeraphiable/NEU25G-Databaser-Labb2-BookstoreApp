@@ -9,10 +9,85 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="Auto"/>
+            <!-- Rubrik -->
+            <RowDefinition Height="Auto"/>
+            <!-- Butiksinfo + knappar -->
             <RowDefinition Height="*"/>
+            <!-- DataGrid / tomvy -->
         </Grid.RowDefinitions>
+
+        <!-- RAD 0: RUBRIK -->
         <Grid Grid.Row="0" Margin="10">
+
+            <StackPanel>
+
+                <!-- HUVUDRUBRIK -->
+                <TextBlock
+            Text="Lagersaldo"
+            FontSize="24"
+            FontWeight="Bold"
+                    HorizontalAlignment="Left"/>
+
+                <!-- UNDERRUBRIK -->
+                <TextBlock
+            Text="Översikt av lagersaldo per butik"
+            Foreground="Gray"
+            Margin="0,2,0,0"
+                    HorizontalAlignment="Left"/>
+
+            </StackPanel>
+        </Grid>
+
+        <!-- RAD 1: BUTIK + KNAPPAR -->
+        <Grid Grid.Row="1"
+      Margin="10"
+      Visibility="{Binding SelectedStore,
+                   Converter={StaticResource NullToVisibilityConverter}}">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- VALD BUTIK -->
+            <StackPanel Grid.Column="0"
+                Orientation="Horizontal"
+                VerticalAlignment="Center">
+
+                <TextBlock Text="Butik"
+                   FontWeight="SemiBold"
+                   VerticalAlignment="Center"/>
+
+                <TextBlock Text="{Binding SelectedStore.StoreId}"
+                   Margin="6,0,8,0"
+                   VerticalAlignment="Center"/>
+
+                <TextBlock Text="{Binding SelectedStore.Street}"
+                   Foreground="Gray"
+                   VerticalAlignment="Center"/>
+            </StackPanel>
+
+            <!-- SAVE -->
+            <Button Grid.Column="2"
+            Content="Spara ändringar"
+            Command="{Binding SaveStockLevelCommand}"
+            Margin="12,0,0,0"
+            VerticalAlignment="Center"/>
+
+            <!-- RESET -->
+            <Button Grid.Column="3"
+            Content="{Binding ModifiedCount}"
+            ContentStringFormat="Återställ ändringar ({0})"
+            Command="{Binding CancelStockLevelCommand}"
+            Margin="8,0,0,0"
+            VerticalAlignment="Center"/>
+
+        </Grid>
+
+        <!--<Grid Grid.Row="0" Margin="10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
@@ -21,38 +96,62 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Label -->
-            <TextBlock Grid.Column="0"
-               Text="Vald butik:"
-               FontWeight="SemiBold"
-               VerticalAlignment="Center"
-               Margin="0,0,8,0"
-                       Visibility="{Binding SelectedStore,
-                   Converter={StaticResource NullToVisibilityConverter}}"/>
 
-            <!-- StoreId -->
-            <TextBlock Grid.Column="1"
-               Text="{Binding SelectedStore.StoreId}"
-               VerticalAlignment="Center"
-               Margin="0,0,12,0"/>
+            --><!-- RUBRIK --><!--
+            <StackPanel Grid.Row="0"
+            Margin="10,10,10,6">
 
-            <!-- Street -->
-            <TextBlock Grid.Column="2"
-               Text="{Binding SelectedStore.Street}"
-               VerticalAlignment="Center"
-               TextTrimming="CharacterEllipsis"/>
+                --><!-- HUVUDRUBRIK --><!--
+                <TextBlock
+        Text="Lagersaldo"
+        FontSize="24"
+        FontWeight="Bold"
+                    />
 
-            <!-- Save button -->
+                --><!-- UNDERRUBRIK --><!--
+                <TextBlock
+        Text="Översikt av lagersaldo per butik"
+        Foreground="Gray"
+        Margin="0,2,0,0"/>
+
+                --><!-- VALD BUTIK --><!--
+                <StackPanel Orientation="Horizontal"
+                Margin="0,6,0,0"
+                Visibility="{Binding SelectedStore,
+                             Converter={StaticResource NullToVisibilityConverter}}">
+
+                    <TextBlock Text="Butik"
+           FontWeight="SemiBold"
+           VerticalAlignment="Center"/>
+
+                    <TextBlock Text="{Binding SelectedStore.StoreId}"
+           Margin="6,0,8,0"
+           VerticalAlignment="Center"/>
+
+                    <TextBlock Text="{Binding SelectedStore.Street}"
+           Foreground="Gray"
+           VerticalAlignment="Center"/>
+                </StackPanel>
+            </StackPanel>
+
+
+            --><!-- Save button --><!--
             <Button Grid.Column="3"
             Content="Spara ändringar"
             Command="{Binding SaveStockLevelCommand}"
-            Margin="12,0,0,0"/>
+            Margin="12,0,0,0"
+                    />
+
             <Button Grid.Column="4"
-          Content="Avbryt"         
+         Content="{Binding ModifiedCount}"
+    ContentStringFormat="Återställ ändringar ({0})"        
           Margin="12,0,0,0"
-                    Command="{Binding CancelStockLevelCommand}"/>
-        </Grid>
-        <DataGrid Grid.Row="1"
+          Command="{Binding CancelStockLevelCommand}"
+                    />
+
+
+        </Grid>-->
+        <DataGrid Grid.Row="2"
                   AutoGenerateColumns="False"
                   ItemsSource="{Binding StockLevel}"
                   SelectedItem="{Binding SelectedRow}" 
@@ -171,7 +270,7 @@
                          Converter={StaticResource NullToVisibilityInverseConverter}}"
             HorizontalAlignment="Center"
             VerticalAlignment="Top"
-                Grid.Row="1">
+                Grid.Row="2">
 
         <TextBlock Text="Ingen butik vald"
                FontSize="18"

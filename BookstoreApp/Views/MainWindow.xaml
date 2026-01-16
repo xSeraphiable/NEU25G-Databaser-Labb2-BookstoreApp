@@ -13,14 +13,20 @@
         <vm:MainWindowViewModel />
     </Window.DataContext>
     <Grid>
+        <!-- KOLUMNER -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <!-- Sidomeny -->
+            <ColumnDefinition Width="*"/>
+            <!-- Innehåll -->
+        </Grid.ColumnDefinitions>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        <!-- MENY -->
         <views:MenuView Grid.Column="0"/>
 
-        <ContentControl Grid.Row="1" Content="{Binding CurrentView}" />
+        <ContentControl Grid.Column="1" 
+                        Content="{Binding CurrentView}"
+                        Margin="10"/>
 
     </Grid>
 </Window>

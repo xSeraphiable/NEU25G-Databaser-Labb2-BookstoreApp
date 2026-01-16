@@ -9,42 +9,61 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="Auto"/>
+            <!-- Rubrik -->
+            <RowDefinition Height="Auto"/>
+            <!-- Knappar -->
             <RowDefinition Height="*"/>
+            <!-- DataGrid -->
         </Grid.RowDefinitions>
 
-        <!-- Toolbar -->
-        <Grid Grid.Row="0" Margin="10" >
+        <!-- RUBRIK -->
+        <Grid Grid.Row="0" Margin="10">
+
+            <StackPanel>
+                <TextBlock
+            Text="Författare"
+            FontSize="24"
+            FontWeight="Bold"/>
+
+                <TextBlock
+            Text="Hantera författare i systemet"
+            Foreground="Gray"
+            Margin="0,2,0,0"/>
+            </StackPanel>
+
+        </Grid>
+        <!-- KNAPPAR -->
+        <Grid Grid.Row="1" Margin="10">
+
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="Författarregister" 
-                       Grid.Column="0"
-                       FontWeight="SemiBold"/>
-           
-                <Button Grid.Column="2"
-                         Content="Ny författare"
-                         Command="{Binding NewAuthorCommand}"
-                         Margin="0,0,6,0"/>
 
-                <Button Grid.Column="3"
-                         Content="Redigera"
-                         Command="{Binding EditAuthorCommand}"
-                         Margin="0,0,6,0"/>
+            <Button Grid.Column="1"
+            Content="Ny författare"
+            Command="{Binding NewAuthorCommand}"
+            Margin="0,0,6,0"
+            VerticalAlignment="Center"/>
 
-                <Button Grid.Column="4"
-                         Content="Ta bort"
-                         Command="{Binding DeleteAuthorCommand}"/>
-                             
-            
+            <Button Grid.Column="2"
+            Content="Redigera"
+            Command="{Binding EditAuthorCommand}"
+            Margin="0,0,6,0"
+            VerticalAlignment="Center"/>
+
+            <Button Grid.Column="3"
+            Content="Ta bort"
+            Command="{Binding DeleteAuthorCommand}"
+            VerticalAlignment="Center"/>
+
         </Grid>
 
         <!-- Author list -->
-        <DataGrid Grid.Row="1"
+        <DataGrid Grid.Row="2"
                Margin="10"
                AutoGenerateColumns="False"
                ItemsSource="{Binding AuthorRows}"

@@ -11,9 +11,13 @@
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen">
     <StackPanel Margin="16">
-        <TextBlock Text="Välj butik:"
+        <TextBlock Text="Välkommen till Bokhandel admin"
                    FontSize="16"
                    FontWeight="SemiBold"
+                   Margin="0,0,0,12"/>
+        <TextBlock Text="Välj butik:"
+                   
+                   
                    Margin="0,0,0,12"/>
 
         <ComboBox ItemsSource="{Binding Stores}"

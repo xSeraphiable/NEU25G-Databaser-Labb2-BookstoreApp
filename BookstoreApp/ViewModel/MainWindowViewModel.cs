@@ -12,8 +12,7 @@ namespace BookstoreApp.ViewModel
 {
     internal class MainWindowViewModel : ViewModelBase
     {
-        public ObservableCollection<Store> Stores { get; } = new();
-        public DelegateCommand SelectStoreCommand { get; }
+
         public DelegateCommand ShowBooksCommand { get; }
         public DelegateCommand ShowStockCommand { get; }
         public DelegateCommand ShowAuthorsCommand { get; }
@@ -26,7 +25,6 @@ namespace BookstoreApp.ViewModel
 
             CurrentView = StockLevelViewModel;
 
-            SelectStoreCommand = new DelegateCommand(SelectStore, CanSelectStore);
             ShowBooksCommand = new DelegateCommand(ShowBooks);
             ShowStockCommand = new DelegateCommand(ShowStock);
             ShowAuthorsCommand = new DelegateCommand(ShowAuthors);
@@ -34,6 +32,7 @@ namespace BookstoreApp.ViewModel
         public StockLevelViewModel StockLevelViewModel { get; }
         public BooksViewModel BooksViewModel { get; }
         public AuthorsViewModel AuthorsViewModel { get; }
+
 
        
         private void ShowAuthors(object? args)
@@ -52,32 +51,6 @@ namespace BookstoreApp.ViewModel
             CurrentView = StockLevelViewModel;
         }
 
-        public bool CanSelectStore(object? args)
-        {
-            return args is Store;
-        }
-
-        public void SelectStore(object? args)
-        {
-            if (args is Store store)
-            {
-                SelectedStore = store;
-            }
-        }
-
-        private Store? _selectedStore;
-        public Store? SelectedStore
-        {
-            get => _selectedStore;
-            set
-            {
-                _selectedStore = value;
-                RaisePropertyChanged();
-               
-                StockLevelViewModel.SelectedStore = value;
-
-            }
-        }
 
         private object _currentView;
 
@@ -91,17 +64,6 @@ namespace BookstoreApp.ViewModel
             }
         }
 
-
-        internal async Task LoadStoresAsync()
-        {
-            using var db = new BookstoreContext();
-
-            var stores = await db.Stores.ToListAsync();
-
-            Stores.Clear();
-            foreach (var s in stores)
-                Stores.Add(s);
-        }
 
     }
 }

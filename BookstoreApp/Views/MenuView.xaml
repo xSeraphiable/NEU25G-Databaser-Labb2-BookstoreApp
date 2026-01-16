@@ -30,51 +30,7 @@
             <Button Content="Lagersaldo per butik"
                     Command="{Binding ShowStockCommand}"
                     Style="{StaticResource SideMenuButton}" />
-            <StackPanel Margin="12,0,0,6">
-
-                <!-- UNDERRUBRIK -->
-                <TextBlock
-        Text="Välj butik"
-        Foreground="#C0C4C8"
-        FontSize="12"
-        FontWeight="SemiBold"
-        Margin="0,4,0,4"/>
-
-                <ItemsControl ItemsSource="{Binding Stores}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Button
-                    Content="{Binding Street}"
-                    Command="{Binding DataContext.SelectStoreCommand,
-                                      RelativeSource={RelativeSource AncestorType=UserControl}}"
-                    CommandParameter="{Binding}"
-                    Style="{StaticResource SideMenuButton}"
-                    Margin="0,0,0,2"/>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-
-            </StackPanel>
-            <!-- VÄLJ BUTIK (KONTEXTUELLT) --><!--
-            <Expander Header="Välj butik"
-                      Foreground="White"
-                      Background="Transparent"
-                      Margin="0,4,0,6">
-
-                <ItemsControl ItemsSource="{Binding Stores}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Button
-                                Content="{Binding Street}"
-                                Command="{Binding DataContext.SelectStoreCommand,
-                                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                CommandParameter="{Binding}"
-                                Style="{StaticResource SideMenuButton}" />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-
-            </Expander>-->
+  
 
             <Separator Margin="0,10"/>
 
@@ -94,100 +50,18 @@
 
             <Separator Margin="0,10"/>
 
-            <!-- ÖVRIGT -->
+            <!-- ÖVRIGT --><!--
             <TextBlock Text="ÖVRIGT"
                        Foreground="#A4B0BE"
                        FontWeight="SemiBold"
                        Margin="0,0,0,6"/>
 
-            <Button Content="Hjälp"
-                    Style="{StaticResource SideMenuButton}" />
-
             <Button Content="Avsluta"
-                    Style="{StaticResource SideMenuButton}" />
+                    Style="{StaticResource SideMenuButton}" />-->
+
+
 
         </StackPanel>
-    </Border>
-
-    <!--<Border Background="#3A3F45"
-            Padding="12">
-
-        <StackPanel>
-
-            --><!-- LOGO / TITEL --><!--
-            <TextBlock
-                Text="Bookstore"
-                FontSize="18"
-                FontWeight="Bold"
-                Foreground="White"
-                Margin="0,0,0,20"/>
-
-            --><!-- START --><!--
-            <TextBlock Text="START"
-                       Foreground="#A4B0BE"
-                       FontWeight="SemiBold"
-                       Margin="0,0,0,6"/>
-
-            --><!-- BYT BUTIK --><!--
-            <Expander Header="Byt butik"
-                      Foreground="White"
-                      Background="Transparent"
-                      Margin="0,0,0,6">
-
-                <ItemsControl ItemsSource="{Binding Stores}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Button
-                                Content="{Binding Street}"
-                                Command="{Binding DataContext.SelectStoreCommand,
-                                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                CommandParameter="{Binding}"
-                                Style="{StaticResource SideMenuButton}" />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-
-            </Expander>
-
-            --><!-- AVSLUTA --><!--
-            <Button Content="Avsluta"
-                    Style="{StaticResource SideMenuButton}" />
-
-            <Separator Margin="0,10"/>
-
-            --><!-- REGISTER --><!--
-            <TextBlock Text="REGISTER"
-                       Foreground="#A4B0BE"
-                       FontWeight="SemiBold"
-                       Margin="0,0,0,6"/>
-
-            <Button Content="Lagersaldo per butik"
-                    Command="{Binding ShowStockCommand}"
-                    Style="{StaticResource SideMenuButton}" />
-
-            <Button Content="Böcker"
-                    Command="{Binding ShowBooksCommand}"
-                    Style="{StaticResource SideMenuButton}" />
-
-            <Button Content="Författare"
-                    Command="{Binding ShowAuthorsCommand}"
-                    Style="{StaticResource SideMenuButton}" />
-
-            <Separator Margin="0,10"/>
-
-            --><!-- ÖVRIGT --><!--
-            <TextBlock Text="ÖVRIGT"
-                       Foreground="#A4B0BE"
-                       FontWeight="SemiBold"
-                       Margin="0,0,0,6"/>
-
-            <Button Content="Redigera"
-                    Style="{StaticResource SideMenuButton}" />
-
-            <Button Content="Hjälp"
-                    Style="{StaticResource SideMenuButton}" />
-
-        </StackPanel>
-    </Border>-->
+    </Border>   
  
 </UserControl>

@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,15 +14,13 @@ namespace BookstoreApp.ViewModel
 {
     internal class StockLevelViewModel : ViewModelBase
     {
-        private readonly MainWindowViewModel? _mainWindowViewModel;
-
+     
         public DelegateCommand SaveStockLevelCommand { get; }
         public DelegateCommand CancelStockLevelCommand { get; }
-        public DelegateCommand CancelStockChangesCommand { get; }
 
         public StockLevelViewModel()
         {
-
+         
             SaveStockLevelCommand = new DelegateCommand(SaveStock, CanSaveStock);
             CancelStockLevelCommand = new DelegateCommand(CancelChanges, CanCancel);
 
@@ -76,18 +73,16 @@ namespace BookstoreApp.ViewModel
 
         public bool CanSaveStock(object? args)
         {
-            //   return StockLevel.Any(r =>
-            //r.IsModified &&
-            //!r.HasErrors);
+
             return StockLevel.Any(r => r.IsModified);
 
         }
 
         public int ModifiedCount =>
     StockLevel.Count(r => r.IsModified);
-
-        //public ObservableCollection<Store> Stores {get;}
         public ObservableCollection<StockLevelRowViewModel> StockLevel { get; } = new();
+
+        public ObservableCollection<Store> Stores { get; } = new();
 
         private Store? _selectedStore;
         public Store? SelectedStore
@@ -95,16 +90,18 @@ namespace BookstoreApp.ViewModel
             get => _selectedStore;
             set
             {
+                if (_selectedStore == value)
+                    return;
+
                 _selectedStore = value;
                 RaisePropertyChanged();
 
-                if (_selectedStore != null)
-                    _ = LoadStockLevelsAsync();
+                _ = LoadStockLevelsAsync();
             }
         }
 
-        private StockLevelRowViewModel _selectedRow;
-        public StockLevelRowViewModel SelectedRow
+        private StockLevelRowViewModel? _selectedRow;
+        public StockLevelRowViewModel? SelectedRow
         {
             get => _selectedRow;
             set
@@ -114,9 +111,45 @@ namespace BookstoreApp.ViewModel
             }
         }
 
+        private bool _isInitialized;
+
+        public async Task InitializeAsync()
+        {
+            if (_isInitialized)
+                return;
+
+            _isInitialized = true;
+            await LoadStoresAsync();
+        }
+
+        public async Task LoadStoresAsync()
+        {
+            if (Stores.Count > 0)
+                return; 
+
+            try
+            {
+                using var db = new BookstoreContext();
+                var stores = await db.Stores.ToListAsync();
+
+                foreach (var store in stores)
+                    Stores.Add(store);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Kunde inte ladda butiker.\n\n" + ex.Message,
+                    "Fel",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
 
         public async Task LoadStockLevelsAsync()
         {
+            try
+            {
+
             StockLevel.Clear();
 
 
@@ -141,8 +174,7 @@ namespace BookstoreApp.ViewModel
 
             foreach (var item in items)
             {
-                //item.OnModifiedChanged =
-                //    () => SaveStockLevelCommand.RaiseCanExecuteChanged();
+
                 item.OnModifiedChanged = () =>
                 {
                     SaveStockLevelCommand.RaiseCanExecuteChanged();
@@ -153,6 +185,15 @@ namespace BookstoreApp.ViewModel
                 StockLevel.Add(item);
             }
 
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Kunde inte ladda lagersaldo.\n\n" + ex.Message,
+                    "Fel vid inläsning",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
 
         }
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BookstoreApp.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,5 +25,14 @@ namespace BookstoreApp.Views
         {
             InitializeComponent();
         }
+
+        private async void StockLevelView_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is StockLevelViewModel vm)
+            {
+                await vm.InitializeAsync();
+            }
+        }
+
     }
 }

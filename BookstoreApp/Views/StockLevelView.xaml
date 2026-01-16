@@ -6,7 +6,9 @@
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              xmlns:local="clr-namespace:BookstoreApp.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             Loaded="StockLevelView_Loaded"
+             >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -33,7 +35,7 @@
                 <TextBlock
             Text="Översikt av lagersaldo per butik"
             Foreground="Gray"
-            Margin="0,2,0,0"
+            Margin="8,2,0,0"
                     HorizontalAlignment="Left"/>
 
             </StackPanel>
@@ -42,8 +44,7 @@
         <!-- RAD 1: BUTIK + KNAPPAR -->
         <Grid Grid.Row="1"
       Margin="10"
-      Visibility="{Binding SelectedStore,
-                   Converter={StaticResource NullToVisibilityConverter}}">
+>
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -57,17 +58,18 @@
                 Orientation="Horizontal"
                 VerticalAlignment="Center">
 
-                <TextBlock Text="Butik"
-                   FontWeight="SemiBold"
-                   VerticalAlignment="Center"/>
+                <Label Content="Välj butik:"/>
+                <ComboBox
+                    ItemsSource="{Binding Stores}"
+                    SelectedItem="{Binding SelectedStore, Mode=TwoWay}"
+                    DisplayMemberPath="Street"
+                    MinWidth="150"
+                    Height="auto"
+                    VerticalAlignment="Bottom"
+                    Padding="1,0"
+                    Margin="1"
+                    />
 
-                <TextBlock Text="{Binding SelectedStore.StoreId}"
-                   Margin="6,0,8,0"
-                   VerticalAlignment="Center"/>
-
-                <TextBlock Text="{Binding SelectedStore.Street}"
-                   Foreground="Gray"
-                   VerticalAlignment="Center"/>
             </StackPanel>
 
             <!-- SAVE -->
@@ -104,70 +106,6 @@
 
         </Grid>
 
-        <!--<Grid Grid.Row="0" Margin="10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-
-
-            --><!-- RUBRIK --><!--
-            <StackPanel Grid.Row="0"
-            Margin="10,10,10,6">
-
-                --><!-- HUVUDRUBRIK --><!--
-                <TextBlock
-        Text="Lagersaldo"
-        FontSize="24"
-        FontWeight="Bold"
-                    />
-
-                --><!-- UNDERRUBRIK --><!--
-                <TextBlock
-        Text="Översikt av lagersaldo per butik"
-        Foreground="Gray"
-        Margin="0,2,0,0"/>
-
-                --><!-- VALD BUTIK --><!--
-                <StackPanel Orientation="Horizontal"
-                Margin="0,6,0,0"
-                Visibility="{Binding SelectedStore,
-                             Converter={StaticResource NullToVisibilityConverter}}">
-
-                    <TextBlock Text="Butik"
-           FontWeight="SemiBold"
-           VerticalAlignment="Center"/>
-
-                    <TextBlock Text="{Binding SelectedStore.StoreId}"
-           Margin="6,0,8,0"
-           VerticalAlignment="Center"/>
-
-                    <TextBlock Text="{Binding SelectedStore.Street}"
-           Foreground="Gray"
-           VerticalAlignment="Center"/>
-                </StackPanel>
-            </StackPanel>
-
-
-            --><!-- Save button --><!--
-            <Button Grid.Column="3"
-            Content="Spara ändringar"
-            Command="{Binding SaveStockLevelCommand}"
-            Margin="12,0,0,0"
-                    />
-
-            <Button Grid.Column="4"
-         Content="{Binding ModifiedCount}"
-    ContentStringFormat="Återställ ändringar ({0})"        
-          Margin="12,0,0,0"
-          Command="{Binding CancelStockLevelCommand}"
-                    />
-
-
-        </Grid>-->
         <DataGrid Grid.Row="2"
                   AutoGenerateColumns="False"
                   ItemsSource="{Binding StockLevel}"
@@ -286,18 +224,15 @@
     <StackPanel Visibility="{Binding SelectedStore,
                          Converter={StaticResource NullToVisibilityInverseConverter}}"
             HorizontalAlignment="Center"
-            VerticalAlignment="Top"
+            VerticalAlignment="Center"
                 Grid.Row="2">
 
-        <TextBlock Text="Ingen butik vald"
+        <TextBlock Text="Välj butik för att visa lagersaldo"
                FontSize="18"
                FontWeight="SemiBold"
                HorizontalAlignment="Center"/>
 
-        <TextBlock Text="Välj en butik i menyn för att visa lagersaldo."
-               Foreground="Gray"
-               Margin="0,8,0,0"
-               HorizontalAlignment="Center"/>
+
     </StackPanel>
     </Grid>
 

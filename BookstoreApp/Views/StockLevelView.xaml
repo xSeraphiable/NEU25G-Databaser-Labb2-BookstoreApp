@@ -58,7 +58,7 @@
                 Orientation="Horizontal"
                 VerticalAlignment="Center">
 
-                <Label Content="Välj butik:"/>
+                <Label Content="Vald butik:"/>
                 <ComboBox
                     ItemsSource="{Binding Stores}"
                     SelectedItem="{Binding SelectedStore, Mode=TwoWay}"

@@ -34,8 +34,6 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="10"/>
-            <!--<ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*"/>-->
         </Grid.ColumnDefinitions>
 
         <!-- ISBN -->
@@ -51,7 +49,7 @@
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Titel*" />
         <TextBox   Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="1"
                MaxLength="200"
-               Text="{Binding Title, UpdateSourceTrigger=LostFocus,
+               Text="{Binding Title, UpdateSourceTrigger=PropertyChanged,
                               ValidatesOnDataErrors=True}"
                    ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
                            RelativeSource={RelativeSource Self}}"/>
@@ -80,7 +78,7 @@
                      />
 
         <!-- Kategori / Genre -->
-        <TextBlock Grid.Row="4" Grid.Column="0" Text="Kategori" />
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="Kategori*" />
         <ComboBox  Grid.Row="4" Grid.Column="1"
                ItemsSource="{Binding Categories}"
                SelectedItem="{Binding Category}"
@@ -105,29 +103,13 @@
         <TextBlock Grid.Row="6" Grid.Column="0" Text="Antal sidor" />
         <TextBox   Grid.Row="6" Grid.Column="1"
                Text="{Binding NumberOfPages,
-                              UpdateSourceTrigger=LostFocus,
+                              UpdateSourceTrigger=PropertyChanged,
                               ValidatesOnDataErrors=True}"
                    ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
                            RelativeSource={RelativeSource Self}}"/>
 
-        <!--<TextBlock Grid.Row="6" Grid.Column="3" Text="Vikt (g)" />
-        <TextBox   Grid.Row="6" Grid.Column="4"
-               Text="{Binding Weight,
-                              UpdateSourceTrigger=PropertyChanged,
-                              ValidatesOnDataErrors=True}"
-                   ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
-                           RelativeSource={RelativeSource Self}}"/>-->
 
-        <!-- Inköpspris / Försäljningspris -->
-        <!--<TextBlock Grid.Row="7" Grid.Column="0" Text="Inköpspris" />
-        <TextBox   Grid.Row="7" Grid.Column="1"
-               Text="{Binding PurchasePrice,
-                              UpdateSourceTrigger=LostFocus,
-                              ValidatesOnDataErrors=True}"
-                   ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
-                           RelativeSource={RelativeSource Self}}"/>-->
-
-        <TextBlock Grid.Row="7" Grid.Column="0" Text="Försäljningspris" />
+        <TextBlock Grid.Row="7" Grid.Column="0" Text="Försäljningspris*" />
         <TextBox   Grid.Row="7" Grid.Column="1"
                Text="{Binding SalesPrice,
                               UpdateSourceTrigger=LostFocus,
@@ -151,5 +133,7 @@
                 IsCancel="True"
                 />
         </StackPanel>
+
+        <TextBlock Grid.Row="9" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="*måste anges" FontStyle="Italic"/>
     </Grid>
 </Window>

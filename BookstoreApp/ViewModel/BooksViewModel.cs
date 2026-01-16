@@ -58,7 +58,7 @@ namespace BookstoreApp.ViewModel
         {
             if (SelectedBookRow is null)
                 return;
-            
+
             using var db = new BookstoreContext();
 
 
@@ -101,6 +101,7 @@ namespace BookstoreApp.ViewModel
                 return;
 
             book.Authors.Clear();
+            db.StockLevels.RemoveRange(book.StockLevels);
 
             db.Books.Remove(book);
             await db.SaveChangesAsync();
@@ -156,7 +157,7 @@ namespace BookstoreApp.ViewModel
             };
 
             if (dialog.ShowDialog() == true)
-            {               
+            {
                 await LoadBookRowsAsync();
             }
         }

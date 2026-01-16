@@ -9,6 +9,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace BookstoreApp.ViewModel
 {
@@ -49,6 +50,18 @@ namespace BookstoreApp.ViewModel
 
         public event Action<bool>? RequestClose;
 
+        private Category? _initialCategory;
+        private ICollection<Author>? _initialAuthors;
+
+        public ObservableCollection<Category> Categories { get; private set; }
+        public ObservableCollection<AuthorRowViewModel> Authors { get; private set; }
+
+        public bool HasErrors =>
+            !string.IsNullOrEmpty(this[nameof(Isbn)]) ||
+            !string.IsNullOrEmpty(this[nameof(Title)]) ||
+            !string.IsNullOrEmpty(this[nameof(Category)]) ||
+            !string.IsNullOrEmpty(this[nameof(SalesPrice)]);
+
         private void Initialize()
         {
             Categories = new ObservableCollection<Category>();
@@ -65,6 +78,18 @@ namespace BookstoreApp.ViewModel
 
         public async void SaveBookAsync(object? args)
         {
+
+            if (HasErrors)
+            {
+                MessageBox.Show(
+                    "Det finns ogiltiga eller saknade värden. Kontrollera formuläret.",
+                    "Kan inte spara bok",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                return;
+            }
+
             using var db = new BookstoreContext();
 
             Book book;
@@ -120,6 +145,8 @@ namespace BookstoreApp.ViewModel
 
             if (!string.IsNullOrEmpty(this[nameof(Isbn)]))
                 return;
+           
+            await db.SaveChangesAsync();
 
             if (IsNew)
             {
@@ -139,7 +166,6 @@ namespace BookstoreApp.ViewModel
                 await db.SaveChangesAsync();
             }
 
-            await db.SaveChangesAsync();
 
             RequestClose?.Invoke(true);
         }
@@ -187,11 +213,6 @@ namespace BookstoreApp.ViewModel
             }
         }
 
-        private Category? _initialCategory;
-        private ICollection<Author>? _initialAuthors;
-
-        public ObservableCollection<Category> Categories { get; private set; }
-        public ObservableCollection<AuthorRowViewModel> Authors { get; private set; }
 
 
 
@@ -360,7 +381,10 @@ namespace BookstoreApp.ViewModel
                     if (Category == null)
                         return "Kategori måste väljas";
                     break;
-
+                case nameof(SalesPrice):
+                    if (SalesPrice <= 0)
+                        return "Pris måste vara större än 0";
+                    break;
             }
 
             return string.Empty;

@@ -56,11 +56,11 @@ namespace BookstoreApp.ViewModel
         }
 
 
-        private object _currentView;
+        private object? _currentView;
 
         public object CurrentView
         {
-            get => _currentView;
+            get => _currentView!;
             set
             {
                 _currentView = value;

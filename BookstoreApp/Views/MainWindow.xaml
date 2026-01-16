@@ -7,7 +7,7 @@
         xmlns:views="clr-namespace:BookstoreApp.Views"  
         xmlns:vm="clr-namespace:BookstoreApp.ViewModel"
         mc:Ignorable="d"
-        Title="Bokhandel" Height="600" Width="1000"
+        Title="Bokhandel" Height="600" Width="1100"
         WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <vm:MainWindowViewModel />

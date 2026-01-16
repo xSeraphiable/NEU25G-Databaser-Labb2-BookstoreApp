@@ -76,6 +76,7 @@ namespace BookstoreApp.ViewModel
             return StockLevel.Any(r => r.IsModified);
         }
 
+   
         public int ModifiedCount =>
     StockLevel.Count(r => r.IsModified);
         public ObservableCollection<StockLevelRowViewModel> StockLevel { get; } = new();

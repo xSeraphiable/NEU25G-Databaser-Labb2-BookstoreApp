@@ -72,7 +72,7 @@ namespace BookstoreApp.ViewModel
 
             _ = LoadAllAuthorsAsync();
 
-            SaveBookCommand = new DelegateCommand(SaveBookAsync, CanSaveBook);
+            SaveBookCommand = new DelegateCommand(SaveBookAsync);
         }
 
         public bool CanSaveBook(object? args)
@@ -187,7 +187,7 @@ namespace BookstoreApp.ViewModel
             {
                 var vm = new AuthorRowViewModel(author);
 
-                vm.PropertyChanged += (_, e) => //TODO: följ upp
+                vm.PropertyChanged += (_, e) => 
                 {
                     if (e.PropertyName == nameof(AuthorRowViewModel.IsSelected))
                     {
@@ -291,11 +291,6 @@ namespace BookstoreApp.ViewModel
         }
         private Category? _category = null!;
 
-        //    public string SelectedAuthorsText =>
-        //string.Join(", ",
-        //    Authors
-        //        .Where(a => a.IsSelected)
-        //        .Select(a => a.FullName));
         public string SelectedAuthorsText
         {
             get
@@ -413,7 +408,11 @@ namespace BookstoreApp.ViewModel
                     break;
                 case nameof(SalesPrice):
                     if (SalesPrice <= 0)
-                        return "Pris måste vara större än 0";
+                        return "Pris måste vara högre än 0 kr";
+                    if (SalesPrice > 100000)
+                    {
+                        return "Pris måste vara lägre än 1 000 000 kr";
+                    }
                     break;
             }
 

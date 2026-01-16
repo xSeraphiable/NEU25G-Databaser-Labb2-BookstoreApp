@@ -29,6 +29,7 @@ namespace BookstoreApp.ViewModel
                 _quantity = value;
                 RaisePropertyChanged();
                 RaisePropertyChanged(nameof(IsModified));
+                RaisePropertyChanged(nameof(IsInactive));
                 OnModifiedChanged?.Invoke();
             }
         }
@@ -44,6 +45,7 @@ namespace BookstoreApp.ViewModel
                 _quantityOrdered = value;         
                 RaisePropertyChanged();
                 RaisePropertyChanged(nameof(IsModified));
+                RaisePropertyChanged(nameof(IsInactive));
                 OnModifiedChanged?.Invoke();
             }
         }
@@ -51,6 +53,9 @@ namespace BookstoreApp.ViewModel
         public bool IsModified =>
         Quantity != OriginalQuantity ||
         QuantityOrdered != OriginalQuantityOrdered;
+
+        public bool IsInactive =>
+    Quantity == 0 && QuantityOrdered == 0;
 
         public void Reset()
         {

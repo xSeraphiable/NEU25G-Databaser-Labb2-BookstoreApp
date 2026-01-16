@@ -59,7 +59,18 @@
             <Setter Property="Margin" Value="4,0,0,6"/>
         </Style>
 
- 
+
+        <Style TargetType="FrameworkElement">
+   
+            <Setter Property="ToolTipService.InitialShowDelay" Value="150"/>
+
+            <Setter Property="ToolTipService.ShowDuration" Value="60000"/>
+
+            <Setter Property="ToolTipService.BetweenShowDelay" Value="50"/>
+        </Style>
+
+
+
         <Style TargetType="DataGrid" >
             <!-- Struktur -->
             <Setter Property="AutoGenerateColumns" Value="False"/>
@@ -69,10 +80,12 @@
 
             <!-- Utseende -->
             <Setter Property="RowHeaderWidth" Value="30"/>
-            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+            <Setter Property="GridLinesVisibility" Value="All"/>
             <Setter Property="HeadersVisibility" Value="Column"/>
             <Setter Property="BorderBrush" Value="#DDD"/>
             <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="VerticalGridLinesBrush" Value="Gray"/>
+            
 
             <!-- Rader -->
             <Setter Property="AlternatingRowBackground" Value="White"/>
@@ -93,12 +106,18 @@
 
 
         <Style TargetType="DataGridCell">
-            <Setter Property="Padding" Value="12,6"/>
+       
             <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="BorderThickness" Value="0"/>
-        </Style>
+              <Setter Property="Padding" Value="10,6,16,6"/>
+               <Setter Property="VerticalContentAlignment" Value="Center"/>
  
+        </Style>
 
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Padding" Value="10,6"/>
+            <Setter Property="BorderThickness" Value="0,0,1,1"/>
+            <Setter Property="BorderBrush" Value="#C0C0C0"/>
+        </Style>
 
         <Style TargetType="Button">
             <Setter Property="Padding" Value="2,0"/>

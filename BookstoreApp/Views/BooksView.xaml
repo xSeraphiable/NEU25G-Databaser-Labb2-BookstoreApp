@@ -63,40 +63,13 @@
 
         </Grid>
 
-        <!-- Toolbar --><!--
-        <Grid Grid.Row="0" Margin="10" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="Bokregister" 
-                       Grid.Column="0"
-                       FontWeight="SemiBold"/>
-            <Button Grid.Column="2"
-                    Content="Ny bok"
-                    Command="{Binding NewBookCommand}"
-                    Margin="0,0,6,0"/>
-
-            <Button Grid.Column="3"
-                    Content="Redigera"
-                    Command="{Binding EditBookCommand}"
-                    Margin="0,0,6,0"/>
-
-            <Button Grid.Column="4"
-                    Content="Ta bort"
-                    Command="{Binding DeleteBookCommand}"/>
-        </Grid>-->
-
-        <!-- Book list -->
         <DataGrid Grid.Row="2"
                   Margin="10"
                   AutoGenerateColumns="False"
                   ItemsSource="{Binding BookRows}"
                   SelectedItem="{Binding SelectedBookRow}"
-                  IsReadOnly="True">
+                  IsReadOnly="True"
+                  Language="sv-SE">
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ISBN"
@@ -107,7 +80,7 @@
                                     Binding="{Binding Title}"
                                     Width="2*"/>
 
-                <DataGridTextColumn Header="Pris"
+                <DataGridTextColumn Header="Försäljningspris"
                                     Binding="{Binding Price}"
                                     Width="*">
                     <DataGridTextColumn.ElementStyle>
@@ -118,8 +91,7 @@
                 </DataGridTextColumn>
 
                 <DataGridTextColumn Header="Utgiven"
-                                    Binding="{Binding ReleaseDate,
-                                              StringFormat={}{0:yyyy-MM-dd}}"
+                                    Binding="{Binding ReleaseDate}"
                                     Width="*">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">

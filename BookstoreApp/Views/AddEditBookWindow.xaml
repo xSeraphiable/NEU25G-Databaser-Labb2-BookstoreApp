@@ -38,14 +38,15 @@
         </Grid.ColumnDefinitions>
 
         <!-- ISBN -->
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="ISBN*" />
+       
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="ISBN* (13)" HorizontalAlignment="Left"/>
         <TextBox   Grid.Row="0" Grid.Column="1"
                MaxLength="13"
                    Width="90"
                    HorizontalAlignment="Left"
                    Margin="0,10,0,10"
                    Padding="1"
-               Text="{Binding Isbn, UpdateSourceTrigger=LostFocus,
+               Text="{Binding Isbn, UpdateSourceTrigger=PropertyChanged,
                               ValidatesOnDataErrors=True}"
                    ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
                            RelativeSource={RelativeSource Self}}"/>
@@ -142,8 +143,10 @@
                    Margin="0,5,0,5"
                    Padding="1"
                Text="{Binding SalesPrice,
-                              UpdateSourceTrigger=LostFocus,
-                              ValidatesOnDataErrors=True}"
+                              UpdateSourceTrigger=PropertyChanged,
+                              ValidatesOnDataErrors=True,
+                              StringFormat=F2,
+                              ConverterCulture=sv-SE}"
                    ToolTip="{Binding (Validation.Errors)[0].ErrorContent,
                            RelativeSource={RelativeSource Self}}"/>
 

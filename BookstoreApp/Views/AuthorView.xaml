@@ -68,12 +68,20 @@
                AutoGenerateColumns="False"
                ItemsSource="{Binding AuthorRows}"
                SelectedItem="{Binding SelectedAuthorRow}"
-               IsReadOnly="True">
+               IsReadOnly="True"
+               Language="sv-SE">
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID"
                                  Binding="{Binding AuthorId}"
-                                 Width="*"/>
+                                 Width="*"
+                                 >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
 
                 <DataGridTextColumn Header="Namn"
                                  Binding="{Binding FullName}"

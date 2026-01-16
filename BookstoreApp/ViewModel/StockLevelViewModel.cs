@@ -73,9 +73,7 @@ namespace BookstoreApp.ViewModel
 
         public bool CanSaveStock(object? args)
         {
-
             return StockLevel.Any(r => r.IsModified);
-
         }
 
         public int ModifiedCount =>

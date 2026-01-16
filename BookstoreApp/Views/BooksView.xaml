@@ -22,12 +22,12 @@
                 <TextBlock
             Text="Bokregister"
             FontSize="24"
-            FontWeight="Bold"/>
+            FontWeight="Black"/>
 
                 <TextBlock
             Text="Hantera böcker i systemet"
             Foreground="Gray"
-            Margin="0,2,0,0"/>
+             Margin="8,2,0,0"/>
             </StackPanel>
 
         </Grid>

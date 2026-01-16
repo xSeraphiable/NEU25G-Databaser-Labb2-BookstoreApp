@@ -28,7 +28,7 @@
                 <TextBlock
             Text="Lagersaldo"
             FontSize="24"
-            FontWeight="Bold"
+            FontWeight="Black"
                     HorizontalAlignment="Left"/>
 
                 <!-- UNDERRUBRIK -->

@@ -37,7 +37,6 @@ namespace BookstoreApp.ViewModel
             Title = book.Title;
             SalesPrice = book.SalesPrice;
             Language = book.Language;
-            //PurchasePrice = book.PurchasePrice;
             Weight = book.Weight;
             ReleaseDate = book.ReleaseDate;
             NumberOfPages = book.NumberOfPages;
@@ -57,7 +56,7 @@ namespace BookstoreApp.ViewModel
             _ = LoadCategoriesAsync();
 
             Authors = new ObservableCollection<AuthorRowViewModel>();
-      
+
             _ = LoadAllAuthorsAsync();
 
             SaveBookCommand = new DelegateCommand(SaveBookAsync);
@@ -90,7 +89,10 @@ namespace BookstoreApp.ViewModel
             if (Category == null)
                 return;
 
-            book.Isbn = Isbn;
+            if (IsNew)
+            {
+                book.Isbn = Isbn;
+            }
             book.Title = Title;
             book.SalesPrice = SalesPrice;
             book.Weight = Weight;
@@ -108,13 +110,31 @@ namespace BookstoreApp.ViewModel
                 .ToListAsync();
 
             book.Authors.Clear();
-            foreach (var author in authors)
+            foreach (var author in authors) //TODO: kolla här
             {
                 book.Authors.Add(author);
             }
 
             if (!string.IsNullOrEmpty(this[nameof(Isbn)]))
                 return;
+
+            if (IsNew)
+            {
+                var stores = await db.Stores.ToListAsync();
+
+                foreach (var store in stores)
+                {
+                    db.StockLevels.Add(new StockLevel
+                    {
+                        Isbn = book.Isbn,
+                        StoreId = store.StoreId,
+                        Quantity = 0,
+                        QuantityOrdered = 0
+                    });
+                }
+
+                await db.SaveChangesAsync();
+            }
 
             await db.SaveChangesAsync();
 
@@ -135,7 +155,7 @@ namespace BookstoreApp.ViewModel
             {
                 var vm = new AuthorRowViewModel(author);
 
-                if (!IsNew && _initialAuthors != null) 
+                if (!IsNew && _initialAuthors != null)
                 {
                     vm.IsSelected = _initialAuthors
                         .Any(a => a.AuthorId == author.AuthorId);
@@ -208,13 +228,6 @@ namespace BookstoreApp.ViewModel
         }
         private decimal _salesPrice;
 
-        //public decimal PurchasePrice
-        //{
-        //    get => _purchasePrice;
-        //    set { _purchasePrice = value; OnChanged(); }
-        //}
-        //private decimal _purchasePrice;
-
         public int? Weight
         {
             get => _weight;
@@ -246,7 +259,7 @@ namespace BookstoreApp.ViewModel
 
         private void OnChanged([CallerMemberName] string? name = null)
         {
-    
+
             IsModified = true;
             RaisePropertyChanged(name);
 

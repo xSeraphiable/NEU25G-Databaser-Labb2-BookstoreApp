@@ -49,6 +49,10 @@ namespace BookstoreApp.ViewModel
         private void ShowStock(object? args)
         {
             CurrentView = StockLevelViewModel;
+            if (StockLevelViewModel.SelectedStore != null)
+            {
+              _ = StockLevelViewModel.LoadStockLevelsAsync();
+            }
         }
 
 

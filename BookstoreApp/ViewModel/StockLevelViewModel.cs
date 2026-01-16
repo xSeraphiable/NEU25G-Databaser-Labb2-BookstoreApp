@@ -20,20 +20,12 @@ namespace BookstoreApp.ViewModel
         public DelegateCommand SaveStockLevelCommand { get; }
         public DelegateCommand CancelStockLevelCommand { get; }
         public DelegateCommand CancelStockChangesCommand { get; }
+
         public StockLevelViewModel()
         {
-            //_mainWindowViewModel = mainWindowViewModel; //plocka bort?
 
             SaveStockLevelCommand = new DelegateCommand(SaveStock, CanSaveStock);
             CancelStockLevelCommand = new DelegateCommand(CancelChanges, CanCancel);
-            //_mainWindowViewModel.PropertyChanged += async (_, e) =>
-            //{
-            //    if (e.PropertyName == nameof(MainWindowViewModel.SelectedStore))
-            //    {
-            //        RaisePropertyChanged(nameof(SelectedStore));
-            //        await LoadStockLevelsAsync();
-            //    }
-            //};
 
         }
         private void CancelChanges(object? args)
@@ -43,7 +35,7 @@ namespace BookstoreApp.ViewModel
         }
         private bool CanCancel(object? args)
         {
-            return StockLevel.Any(r => r.IsModified);
+               return ModifiedCount > 0;
         }
         public async void SaveStock(object? args)
         {
@@ -77,9 +69,7 @@ namespace BookstoreApp.ViewModel
             }
 
             await db.SaveChangesAsync();
-
-            //foreach (var row in modifiedRows)
-            //    row.AcceptChanges();
+            await LoadStockLevelsAsync();
 
             SaveStockLevelCommand.RaiseCanExecuteChanged();
         }
@@ -96,7 +86,7 @@ namespace BookstoreApp.ViewModel
         public int ModifiedCount =>
     StockLevel.Count(r => r.IsModified);
 
-        //public ObservableCollection<Store> Stores => _mainWindowViewModel.Stores; //TODO: plocka bort?
+        //public ObservableCollection<Store> Stores {get;}
         public ObservableCollection<StockLevelRowViewModel> StockLevel { get; } = new();
 
         private Store? _selectedStore;

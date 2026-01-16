@@ -59,11 +59,13 @@ namespace BookstoreApp.ViewModel
             }
             else
             {
-                author = await db.Authors
+                var editAuthor = await db.Authors
                     .FirstOrDefaultAsync(a => a.AuthorId == _authorId);
 
-                if (author == null)
+                if (editAuthor == null)
                     return;
+
+                author = editAuthor;
             }
 
             author.FirstName = FirstName;

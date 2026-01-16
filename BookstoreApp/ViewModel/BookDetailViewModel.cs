@@ -72,10 +72,13 @@ namespace BookstoreApp.ViewModel
 
             _ = LoadAllAuthorsAsync();
 
-            SaveBookCommand = new DelegateCommand(SaveBookAsync);
+            SaveBookCommand = new DelegateCommand(SaveBookAsync, CanSaveBook);
         }
 
-
+        public bool CanSaveBook(object? args)
+        {
+            return !HasErrors;
+        }
         public async void SaveBookAsync(object? args)
         {
 
@@ -184,6 +187,14 @@ namespace BookstoreApp.ViewModel
             {
                 var vm = new AuthorRowViewModel(author);
 
+                vm.PropertyChanged += (_, e) => //TODO: följ upp
+                {
+                    if (e.PropertyName == nameof(AuthorRowViewModel.IsSelected))
+                    {
+                        RaisePropertyChanged(nameof(SelectedAuthorsText));
+                    }
+                };
+
                 if (!IsNew && _initialAuthors != null)
                 {
                     vm.IsSelected = _initialAuthors
@@ -280,13 +291,32 @@ namespace BookstoreApp.ViewModel
         }
         private Category? _category = null!;
 
+        //    public string SelectedAuthorsText =>
+        //string.Join(", ",
+        //    Authors
+        //        .Where(a => a.IsSelected)
+        //        .Select(a => a.FullName));
+        public string SelectedAuthorsText
+        {
+            get
+            {
+                var names = Authors
+                    .Where(a => a.IsSelected)
+                    .Select(a => a.FullName)
+                    .ToList();
+
+                return names.Any()
+                    ? string.Join(", ", names)
+                    : "Inga författare valda";
+            }
+        }
 
         private void OnChanged([CallerMemberName] string? name = null)
         {
 
             IsModified = true;
             RaisePropertyChanged(name);
-
+            SaveBookCommand.RaiseCanExecuteChanged();
 
         }
 

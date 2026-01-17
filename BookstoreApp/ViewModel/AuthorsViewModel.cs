@@ -17,19 +17,18 @@ namespace BookstoreApp.ViewModel
 
         public AuthorsViewModel()
         {
-            AuthorRows = new ObservableCollection<AuthorRowViewModel>();
-            _ = LoadAuthorRowsAsync();
+            NewAuthorCommand = new AsyncDelegateCommand(NewAuthorAsync);
+            EditAuthorCommand = new AsyncDelegateCommand(EditAuthorAsync, CanEditAuthor);
+            DeleteAuthorCommand = new AsyncDelegateCommand(DeleteAuthorAsync, CanDeleteAuthor);
 
-            NewAuthorCommand = new DelegateCommand(NewAuthorAsync);
-            EditAuthorCommand = new DelegateCommand(EditAuthor, CanEditAuthor);
-            DeleteAuthorCommand = new DelegateCommand(DeleteAuthor, CanDeleteAuthor);
+            AuthorRows = new ObservableCollection<AuthorRowViewModel>();
         }
 
         public ObservableCollection<AuthorRowViewModel> AuthorRows { get; private set; }
 
-        public DelegateCommand EditAuthorCommand { get; }
-        public DelegateCommand DeleteAuthorCommand { get; }
-        public DelegateCommand NewAuthorCommand { get; }
+        public AsyncDelegateCommand EditAuthorCommand { get; }
+        public AsyncDelegateCommand DeleteAuthorCommand { get; }
+        public AsyncDelegateCommand NewAuthorCommand { get; }
 
         private AuthorRowViewModel? _selectedAuthorRow;
         public AuthorRowViewModel? SelectedAuthorRow
@@ -44,9 +43,13 @@ namespace BookstoreApp.ViewModel
             }
         }
 
+        public async Task LoadAsync()
+        {
+            await LoadAuthorRowsAsync();
+        }
+
         public async Task LoadAuthorRowsAsync()
         {
-
             using var db = new BookstoreContext();
 
             var authors = await db.Authors
@@ -61,7 +64,7 @@ namespace BookstoreApp.ViewModel
             }
         }
 
-        public async void NewAuthorAsync(object? args)
+        public async Task NewAuthorAsync(object? args)
         {
             var vm = new AuthorDetailViewModel();
 
@@ -76,7 +79,7 @@ namespace BookstoreApp.ViewModel
             }
         }
 
-        public async void DeleteAuthor(object? args)
+        public async Task DeleteAuthorAsync(object? args)
         {
             if (SelectedAuthorRow is null) return;
 
@@ -107,7 +110,7 @@ namespace BookstoreApp.ViewModel
             if (result == MessageBoxResult.Cancel)
                 return;
 
-            
+
             db.Authors.Remove(author);
             await db.SaveChangesAsync();
 
@@ -119,7 +122,7 @@ namespace BookstoreApp.ViewModel
             return SelectedAuthorRow != null;
         }
 
-        public async void EditAuthor(object? args)
+        public async Task EditAuthorAsync(object? args)
         {
             if (SelectedAuthorRow is null) return;
 

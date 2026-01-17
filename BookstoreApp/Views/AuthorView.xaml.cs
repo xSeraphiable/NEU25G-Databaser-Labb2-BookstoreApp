@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BookstoreApp.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,20 @@ namespace BookstoreApp.Views
         public AuthorView()
         {
             InitializeComponent();
+        }
+
+        private async void AuthorsView_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is not AuthorsViewModel vm)
+                return;
+
+           
+            while (!App.DatabaseReady)
+            {
+                await Task.Delay(50);
+            }
+
+            await vm.LoadAsync();
         }
     }
 }

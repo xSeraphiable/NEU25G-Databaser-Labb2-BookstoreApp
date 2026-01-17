@@ -28,10 +28,16 @@ namespace BookstoreApp.Views
 
         private async void StockLevelView_Loaded(object sender, RoutedEventArgs e)
         {
-            if (DataContext is StockLevelViewModel vm)
+            if (DataContext is not StockLevelViewModel vm)
+                return;
+
+            // Vänta tills databasen är redo
+            while (!App.DatabaseReady)
             {
-                await vm.InitializeAsync();
+                await Task.Delay(50);
             }
+
+            await vm.InitializeAsync();
         }
 
     }

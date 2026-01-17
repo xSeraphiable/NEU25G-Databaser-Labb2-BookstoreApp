@@ -15,13 +15,13 @@ namespace BookstoreApp.ViewModel
     internal class StockLevelViewModel : ViewModelBase
     {
      
-        public DelegateCommand SaveStockLevelCommand { get; }
+        public AsyncDelegateCommand SaveStockLevelCommand { get; }
         public DelegateCommand CancelStockLevelCommand { get; }
 
         public StockLevelViewModel()
         {
          
-            SaveStockLevelCommand = new DelegateCommand(SaveStock, CanSaveStock);
+            SaveStockLevelCommand = new AsyncDelegateCommand(SaveStockAsync, CanSaveStock);
             CancelStockLevelCommand = new DelegateCommand(CancelChanges, CanCancel);
 
         }
@@ -34,7 +34,7 @@ namespace BookstoreApp.ViewModel
         {
                return ModifiedCount > 0;
         }
-        public async void SaveStock(object? args)
+        public async Task SaveStockAsync(object? args)
         {
             if (SelectedStore is null)
                 return;

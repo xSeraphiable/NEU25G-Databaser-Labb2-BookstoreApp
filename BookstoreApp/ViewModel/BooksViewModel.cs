@@ -17,20 +17,19 @@ namespace BookstoreApp.ViewModel
 
         public BooksViewModel()
         {
-            EditBookCommand = new DelegateCommand(EditBookAsync, CanEditBook);
-            NewBookCommand = new DelegateCommand(NewBookAsync);
-            DeleteBookCommand = new DelegateCommand(DeleteBookAsync, CanDeleteBook);
+            EditBookCommand = new AsyncDelegateCommand(EditBookAsync, CanEditBook);
+            NewBookCommand = new AsyncDelegateCommand(NewBookAsync);
+            DeleteBookCommand = new AsyncDelegateCommand(DeleteBookAsync, CanDeleteBook);
 
             BookRows = new ObservableCollection<BookRowViewModel>();
 
-            Load();
         }
 
         public ObservableCollection<BookRowViewModel> BookRows { get; private set; }
 
-        public DelegateCommand EditBookCommand { get; }
-        public DelegateCommand NewBookCommand { get; }
-        public DelegateCommand DeleteBookCommand { get; }
+        public AsyncDelegateCommand EditBookCommand { get; }
+        public AsyncDelegateCommand NewBookCommand { get; }
+        public AsyncDelegateCommand DeleteBookCommand { get; }
 
 
 
@@ -48,13 +47,13 @@ namespace BookstoreApp.ViewModel
             }
         }
 
-        private async void Load()
+        public async Task LoadAsync()
         {
             await LoadBookRowsAsync();
         }
 
 
-        public async void DeleteBookAsync(object? args)
+        public async Task DeleteBookAsync(object? args)
         {
             if (SelectedBookRow is null)
                 return;
@@ -114,7 +113,7 @@ namespace BookstoreApp.ViewModel
             return SelectedBookRow != null;
         }
 
-        public async void EditBookAsync(object? args)
+        public async Task EditBookAsync(object? args)
         {
             if (SelectedBookRow is null)
                 return;
@@ -147,7 +146,7 @@ namespace BookstoreApp.ViewModel
             return SelectedBookRow != null;
         }
 
-        public async void NewBookAsync(object? args)
+        public async Task NewBookAsync(object? args)
         {
             var vm = new BookDetailViewModel();
 

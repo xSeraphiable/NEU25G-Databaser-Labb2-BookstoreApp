@@ -12,29 +12,32 @@ namespace BookstoreApp
     /// </summary>
     public partial class App : Application
     {
-        protected override async void OnStartup(StartupEventArgs e)
+        public static bool DatabaseReady { get; private set; }
+
+        protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+            _ = InitializeAsync();
+        }
 
+        private async Task InitializeAsync()
+        {
             try
             {
                 using var db = new BookstoreContext();
-
                 await db.Database.MigrateAsync();
                 await DbSeeder.SeedAsync(db);
+
+                DatabaseReady = true;
             }
             catch (Exception ex)
             {
-
-                MessageBox.Show(
-                    "Kunde inte initiera databasen.\n\n" + ex.Message,
-                    "Databasfel",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
-
+                MessageBox.Show(ex.Message, "Databasfel");
                 Shutdown();
             }
         }
     }
 
 }
+
+

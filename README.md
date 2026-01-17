@@ -15,16 +15,26 @@ The application allows a user to:
 
 
 <h1>Installation & Setup</h1>
-
-1) Clone repository and open the solution in Visual Studio.
-2) In Solution Explorer, right-click the project BookstoreApp.Infrastructure and select Manage User Secrets.
-3) Add the following to secrets.json:<br>
- {
+<h3>Requirements</h3> 
+<ul> 
+ <li>Visual Studio 2022</li> 
+ <li>SQL Server LocalDB (installed automatically via Visual Studio – Data storage and processing workload)
+</li> </ul> <h3>Step-by-step</h3> <ol> 
+ <li>Clone the repository and open the solution in Visual Studio.</li>
+ <li>In Solution Explorer, right-click the project <b>BookstoreApp.Infrastructure</b> and select
+  <b>Manage User Secrets</b>.</li> 
+ <li>Add the following to <code>secrets.json</code>:</li> </ol>
+ 
+```json
+{
   "ConnectionStrings": {
     "BookstoreDb": "Server=(localdb)\\MSSQLLocalDB;Database=Bookstore_EF;Trusted_Connection=True;"
   }
 }
-4) Build and run the application. The database will be created and seeded automatically on first startup.
+```
+
+>*Note: You can freely rename the database in secrets.json.* 
+<ol start="4"> <li>Build and run the application. The database will be created and seeded automatically on first startup.</li> </ol>
 
 
 <h3>(Optional) View the database</h3>

@@ -37,17 +37,16 @@ public partial class BookstoreContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        var config = new ConfigurationBuilder().AddUserSecrets<BookstoreContext>().Build();
+        if (optionsBuilder.IsConfigured)
+            return;
 
-        var connectionString = new SqlConnectionStringBuilder()
-        {
-            ServerSPN = config["ServerName"],
-            InitialCatalog = config["DatabaseName"],
-            TrustServerCertificate = true,
-            IntegratedSecurity = true
-        }.ToString();
+        var config = new ConfigurationBuilder()
+            .AddUserSecrets<BookstoreContext>()
+            .Build();
 
-        optionsBuilder.UseSqlServer(connectionString);
+        var cs = config.GetConnectionString("BookstoreDb");
+
+        optionsBuilder.UseSqlServer(cs);
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

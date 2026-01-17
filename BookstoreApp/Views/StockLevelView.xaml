@@ -86,7 +86,7 @@
                 <ComboBox
                     ItemsSource="{Binding Stores}"
                     SelectedItem="{Binding SelectedStore, Mode=TwoWay}"
-                    DisplayMemberPath="StoreId"
+                    DisplayMemberPath="Street"
                     MinWidth="100"
                     Height="auto"
                     VerticalAlignment="Bottom"

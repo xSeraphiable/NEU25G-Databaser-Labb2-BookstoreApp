@@ -28,7 +28,7 @@ namespace BookstoreApp.Views
 
         private async void BooksView_Loaded(object sender, RoutedEventArgs e)
         {
-            if (DataContext is not AuthorsViewModel vm)
+            if (DataContext is not BooksViewModel vm)
                 return;
 
             while (!App.DatabaseReady)

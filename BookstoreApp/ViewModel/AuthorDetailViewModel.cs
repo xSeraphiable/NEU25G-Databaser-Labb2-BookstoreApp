@@ -13,6 +13,12 @@ namespace BookstoreApp.ViewModel
 {
     internal class AuthorDetailViewModel : ViewModelBase, IDataErrorInfo
     {
+
+        private int _authorId;
+        private string _firstName;
+        private string _surname;
+        private DateOnly? _dateOfBirth;
+
         //New author constructor
         public AuthorDetailViewModel()
         {
@@ -39,10 +45,40 @@ namespace BookstoreApp.ViewModel
 
         }
 
+        public bool IsNew { get; }
+        public bool IsModified { get; private set; }
+
+        public string FirstName
+        {
+            get => _firstName;
+            set
+            {
+                _firstName = value;
+                OnChanged();
+            }
+        }
+
+        public string Surname
+        {
+            get => _surname;
+            set
+            {
+                _surname = value;
+                OnChanged();
+            }
+        }
+
+        public DateOnly? DateOfBirth
+        {
+            get => _dateOfBirth;
+            set
+            {
+                _dateOfBirth = value;
+                OnChanged();
+            }
+        }
 
         public DelegateCommand SaveAuthorCommand { get; }
-
-        public event Action<bool>? RequestClose;
 
         public async void SaveAuthorAsync(object? args)
         {
@@ -75,60 +111,17 @@ namespace BookstoreApp.ViewModel
             await db.SaveChangesAsync();
             RequestClose?.Invoke(true);
         }
-
-        private void OnChanged([CallerMemberName] string? name = null)
-        {
-            IsModified = true;
-            RaisePropertyChanged(name);
-            RaisePropertyChanged(nameof(IsModified));
-        }
-
-        public bool IsNew { get; }
-        public bool IsModified { get; private set; }
-
-        private int _authorId;
-
-        private string _firstName;
-        public string FirstName
-        {
-            get => _firstName;
-            set
-            {
-                _firstName = value;
-                OnChanged();
-            }
-        }
-
-        private string _surname;
-        public string Surname
-        {
-            get => _surname;
-            set
-            {
-                _surname = value;
-                OnChanged();
-            }
-        }
-
-        private DateOnly? _dateOfBirth;
-        public DateOnly? DateOfBirth
-        {
-            get => _dateOfBirth;
-            set
-            {
-                _dateOfBirth = value;
-                OnChanged();
-            }
-        }
-
+      
+        public string Error => string.Empty;
+        public string this[string columnName] => Validate(columnName);
         private bool HasErrors =>
     !string.IsNullOrEmpty(this[nameof(FirstName)]) ||
     !string.IsNullOrEmpty(this[nameof(Surname)]) ||
     !string.IsNullOrEmpty(this[nameof(DateOfBirth)]);
-        public string this[string columnName] => Validate(columnName);
-        public string Error => string.Empty;
-
+        
+        
         private string Validate(string propertyName)
+
         {
             switch (propertyName)
             {
@@ -154,5 +147,16 @@ namespace BookstoreApp.ViewModel
 
             return string.Empty;
         }
+
+        private void OnChanged([CallerMemberName] string? name = null)
+        {
+            IsModified = true;
+            RaisePropertyChanged(name);
+            RaisePropertyChanged(nameof(IsModified));
+        }
+
+        public event Action<bool>? RequestClose;
+        
+
     }
 }

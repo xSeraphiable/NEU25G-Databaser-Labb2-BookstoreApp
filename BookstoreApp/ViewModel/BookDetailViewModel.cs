@@ -15,24 +15,34 @@ namespace BookstoreApp.ViewModel
 {
     internal class BookDetailViewModel : ViewModelBase, IDataErrorInfo
     {
+
+        private Category? _initialCategory = null!;
+        private ICollection<Author>? _initialAuthors;
+
+        private string _isbn = string.Empty;
+        private string _title = string.Empty;
+        private string _language = string.Empty;
+        private decimal _salesPrice;
+        private int? _weight;
+        private DateOnly? _releaseDate;
+        private int? _numberOfPages;
+        private Category? _category;
+
         // === Konstruktor: NY BOK ===
         public BookDetailViewModel()
         {
             Initialize();
             IsNew = true;
-            IsModified = false;
-
+    
             ReleaseDate = DateOnly.FromDateTime(DateTime.Today);
-
 
         }
 
         // === Konstruktor: REDIGERA BEFINTLIG BOK ===
         public BookDetailViewModel(Book book)
-        {
-            Initialize();
-            IsNew = false;
-            IsModified = false;
+            :this()
+        {            
+            IsNew = false;           
 
             Isbn = book.Isbn;
             Title = book.Title;
@@ -41,45 +51,98 @@ namespace BookstoreApp.ViewModel
             Weight = book.Weight;
             ReleaseDate = book.ReleaseDate;
             NumberOfPages = book.NumberOfPages;
+
             _initialCategory = book.Category;
             _initialAuthors = book.Authors.ToList();
         }
 
-        public DelegateCommand SaveBookCommand { get; private set; }
+        public bool IsNew { get; }
+        public bool IsModified { get; private set; }
 
+        public string Isbn
+        {
+            get => _isbn;
+            set { _isbn = value; OnChanged(); }
+        }
+      
+        public string Title
+        {
+            get => _title;
+            set
+            {
+                _title = value;
+                OnChanged();
+            }
+        }
+     
 
-        public event Action<bool>? RequestClose;
+        public string Language
+        {
+            get => _language;
+            set
+            {
+                _language = value;
+                OnChanged();
+            }
+        }
+      
+        public decimal SalesPrice
+        {
+            get => _salesPrice;
+            set { _salesPrice = value; OnChanged(); }
+        }
+     
 
-        private Category? _initialCategory;
-        private ICollection<Author>? _initialAuthors;
+        public int? Weight
+        {
+            get => _weight;
+            set { _weight = value; OnChanged(); }
+        }
+     
+
+        public DateOnly? ReleaseDate
+        {
+            get => _releaseDate;
+            set { _releaseDate = value; OnChanged(); }
+        }
+    
+
+        public int? NumberOfPages
+        {
+            get => _numberOfPages;
+            set { _numberOfPages = value; OnChanged(); }
+        }
+      
+
+        public Category? Category
+        {
+            get => _category;
+            set { _category = value; OnChanged(); }
+        }
 
         public ObservableCollection<Category> Categories { get; private set; }
         public ObservableCollection<AuthorRowViewModel> Authors { get; private set; }
 
-        public bool HasErrors =>
-            !string.IsNullOrEmpty(this[nameof(Isbn)]) ||
-            !string.IsNullOrEmpty(this[nameof(Title)]) ||
-            !string.IsNullOrEmpty(this[nameof(Category)]) ||
-            !string.IsNullOrEmpty(this[nameof(SalesPrice)]);
 
-        private void Initialize()
+        public string SelectedAuthorsText
         {
-            Categories = new ObservableCollection<Category>();
+            get
+            {
+                var names = Authors
+                    .Where(a => a.IsSelected)
+                    .Select(a => a.FullName)
+                    .ToList();
 
-            _ = LoadCategoriesAsync();
-
-            Authors = new ObservableCollection<AuthorRowViewModel>();
-
-            _ = LoadAllAuthorsAsync();
-
-            SaveBookCommand = new DelegateCommand(SaveBookAsync);
+                return names.Any()
+                    ? string.Join(", ", names)
+                    : "Inga författare valda";
+            }
         }
 
-        public bool CanSaveBook(object? args)
-        {
-            return !HasErrors;
-        }
-        public async void SaveBookAsync(object? args)
+        public AsyncDelegateCommand SaveBookCommand { get; private set; }
+
+
+        public async Task SaveBookAsync(object? args)
         {
 
             if (HasErrors)
@@ -141,68 +204,36 @@ namespace BookstoreApp.ViewModel
                 .ToListAsync();
 
             book.Authors.Clear();
-            foreach (var author in authors) //TODO: kolla här
+            foreach (var author in authors) 
             {
                 book.Authors.Add(author);
             }
 
             if (!string.IsNullOrEmpty(this[nameof(Isbn)]))
                 return;
-           
+
             await db.SaveChangesAsync();
 
             if (IsNew)
-            {
-                var stores = await db.Stores.ToListAsync();
-
-                foreach (var store in stores)
-                {
-                    db.StockLevels.Add(new StockLevel
-                    {
-                        Isbn = book.Isbn,
-                        StoreId = store.StoreId,
-                        Quantity = 0,
-                        QuantityOrdered = 0
-                    });
-                }
-
-                await db.SaveChangesAsync();
-            }
+                await CreateStockLevelsAsync(db, book.Isbn);
 
 
             RequestClose?.Invoke(true);
         }
 
-        private async Task LoadAllAuthorsAsync()
+    
+
+        private void Initialize()
         {
-            using var db = new BookstoreContext();
+           
+            Categories = new ObservableCollection<Category>();
+            Authors = new ObservableCollection<AuthorRowViewModel>();
 
-            var authors = await db.Authors
-                .OrderBy(a => a.Surname)
-                .ToListAsync();
+            SaveBookCommand = new AsyncDelegateCommand(SaveBookAsync);
 
-            Authors.Clear();
+            _ = LoadCategoriesAsync();
+            _ = LoadAllAuthorsAsync();
 
-            foreach (var author in authors)
-            {
-                var vm = new AuthorRowViewModel(author);
-
-                vm.PropertyChanged += (_, e) => 
-                {
-                    if (e.PropertyName == nameof(AuthorRowViewModel.IsSelected))
-                    {
-                        RaisePropertyChanged(nameof(SelectedAuthorsText));
-                    }
-                };
-
-                if (!IsNew && _initialAuthors != null)
-                {
-                    vm.IsSelected = _initialAuthors
-                        .Any(a => a.AuthorId == author.AuthorId);
-                }
-
-                Authors.Add(vm);
-            }
         }
 
         private async Task LoadCategoriesAsync()
@@ -224,106 +255,66 @@ namespace BookstoreApp.ViewModel
             }
         }
 
-
-
-
-        public string Isbn
+        private async Task LoadAllAuthorsAsync()
         {
-            get => _isbn;
-            set { _isbn = value; OnChanged(); }
-        }
-        private string _isbn = string.Empty;
+            using var db = new BookstoreContext();
 
-        public string Title
-        {
-            get => _title;
-            set
+            var authors = await db.Authors
+                .OrderBy(a => a.Surname)
+                .ToListAsync();
+
+            Authors.Clear();
+
+            foreach (var author in authors)
             {
-                _title = value;
-                OnChanged();
-            }
-        }
-        private string _title = string.Empty;
+                var vm = new AuthorRowViewModel(author);
 
-        public string Language
-        {
-            get => _language;
-            set
-            {
-                _language = value;
-                OnChanged();
-            }
-        }
-        private string _language = string.Empty;
+                vm.PropertyChanged += (_, e) =>
+                {
+                    if (e.PropertyName == nameof(AuthorRowViewModel.IsSelected))
+                    {
+                        RaisePropertyChanged(nameof(SelectedAuthorsText));
+                    }
+                };
 
-        public decimal SalesPrice
-        {
-            get => _salesPrice;
-            set { _salesPrice = value; OnChanged(); }
-        }
-        private decimal _salesPrice;
+                if (!IsNew && _initialAuthors != null)
+                {
+                    vm.IsSelected = _initialAuthors
+                        .Any(a => a.AuthorId == author.AuthorId);
+                }
 
-        public int? Weight
-        {
-            get => _weight;
-            set { _weight = value; OnChanged(); }
-        }
-        private int? _weight;
-
-        public DateOnly? ReleaseDate
-        {
-            get => _releaseDate;
-            set { _releaseDate = value; OnChanged(); }
-        }
-        private DateOnly? _releaseDate;
-
-        public int? NumberOfPages
-        {
-            get => _numberOfPages;
-            set { _numberOfPages = value; OnChanged(); }
-        }
-        private int? _numberOfPages;
-
-        public Category? Category
-        {
-            get => _category;
-            set { _category = value; OnChanged(); }
-        }
-        private Category? _category = null!;
-
-        public string SelectedAuthorsText
-        {
-            get
-            {
-                var names = Authors
-                    .Where(a => a.IsSelected)
-                    .Select(a => a.FullName)
-                    .ToList();
-
-                return names.Any()
-                    ? string.Join(", ", names)
-                    : "Inga författare valda";
+                Authors.Add(vm);
             }
         }
 
-        private void OnChanged([CallerMemberName] string? name = null)
+
+        private static async Task CreateStockLevelsAsync(BookstoreContext db, string isbn)
         {
+            var stores = await db.Stores.ToListAsync();
 
-            IsModified = true;
-            RaisePropertyChanged(name);
-            SaveBookCommand.RaiseCanExecuteChanged();
+            foreach (var store in stores)
+            {
+                db.StockLevels.Add(new StockLevel
+                {
+                    Isbn = isbn,
+                    StoreId = store.StoreId,
+                    Quantity = 0,
+                    QuantityOrdered = 0
+                });
+            }
 
+            await db.SaveChangesAsync();
         }
 
-        // === State ===
-        public bool IsNew { get; }
-        public bool IsModified { get; private set; }
 
-
-
-        // === Validation ===
         public string this[string columnName] => Validate(columnName);
         public string Error => string.Empty;
+
+        public bool HasErrors =>
+            !string.IsNullOrEmpty(this[nameof(Isbn)]) ||
+            !string.IsNullOrEmpty(this[nameof(Title)]) ||
+            !string.IsNullOrEmpty(this[nameof(Category)]) ||
+            !string.IsNullOrEmpty(this[nameof(SalesPrice)]);
 
 
         private string Validate(string propertyName)
@@ -418,6 +409,20 @@ namespace BookstoreApp.ViewModel
 
             return string.Empty;
         }
+
+
+        private void OnChanged([CallerMemberName] string? name = null)
+        {
+
+            IsModified = true;
+            RaisePropertyChanged(name);
+            SaveBookCommand.RaiseCanExecuteChanged();
+
+        }
+
+
+        public event Action<bool>? RequestClose;
+
     }
 }
 

@@ -15,6 +15,8 @@ namespace BookstoreApp.ViewModel
     internal class BooksViewModel : ViewModelBase
     {
 
+        private BookRowViewModel? _selectedBookRow;
+
         public BooksViewModel()
         {
             EditBookCommand = new AsyncDelegateCommand(EditBookAsync, CanEditBook);
@@ -22,18 +24,9 @@ namespace BookstoreApp.ViewModel
             DeleteBookCommand = new AsyncDelegateCommand(DeleteBookAsync, CanDeleteBook);
 
             BookRows = new ObservableCollection<BookRowViewModel>();
-
         }
 
         public ObservableCollection<BookRowViewModel> BookRows { get; private set; }
-
-        public AsyncDelegateCommand EditBookCommand { get; }
-        public AsyncDelegateCommand NewBookCommand { get; }
-        public AsyncDelegateCommand DeleteBookCommand { get; }
-
-
-
-        private BookRowViewModel? _selectedBookRow;
 
         public BookRowViewModel? SelectedBookRow
         {
@@ -47,11 +40,59 @@ namespace BookstoreApp.ViewModel
             }
         }
 
+        public AsyncDelegateCommand EditBookCommand { get; }
+        public AsyncDelegateCommand NewBookCommand { get; }
+        public AsyncDelegateCommand DeleteBookCommand { get; }
+
+              
+
         public async Task LoadAsync()
         {
             await LoadBookRowsAsync();
         }
 
+        public async Task NewBookAsync(object? args)
+        {
+            var vm = new BookDetailViewModel();
+
+            var dialog = new AddEditBookWindow
+            {
+                DataContext = vm
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                await LoadBookRowsAsync();
+            }
+        }
+
+        public async Task EditBookAsync(object? args)
+        {
+            if (SelectedBookRow is null)
+                return;
+
+            using var db = new BookstoreContext();
+
+            var book = await db.Books
+                .Include(b => b.Category)
+                .Include(a => a.Authors)
+                .FirstAsync(b => b.Isbn == SelectedBookRow.Isbn);
+
+            if (book == null)
+                return;
+
+            var vm = new BookDetailViewModel(book);
+
+            var dialog = new AddEditBookWindow
+            {
+                DataContext = vm
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                await LoadBookRowsAsync();
+            }
+        }
 
         public async Task DeleteBookAsync(object? args)
         {
@@ -108,58 +149,23 @@ namespace BookstoreApp.ViewModel
             await LoadBookRowsAsync();
         }
 
-        public bool CanDeleteBook(object? args)
+        private bool CanDeleteBook(object? args)
         {
             return SelectedBookRow != null;
         }
-
-        public async Task EditBookAsync(object? args)
-        {
-            if (SelectedBookRow is null)
-                return;
-
-            using var db = new BookstoreContext();
-
-            var book = await db.Books
-                .Include(b => b.Category)
-                .Include(a => a.Authors)
-                .FirstAsync(b => b.Isbn == SelectedBookRow.Isbn);
-
-            if (book == null)
-                return;
-
-            var vm = new BookDetailViewModel(book);
-
-            var dialog = new AddEditBookWindow
-            {
-                DataContext = vm
-            };
-
-            if (dialog.ShowDialog() == true)
-            {
-                await LoadBookRowsAsync();
-            }
-        }
-
+            
         private bool CanEditBook(object? args)
         {
             return SelectedBookRow != null;
         }
 
-        public async Task NewBookAsync(object? args)
-        {
-            var vm = new BookDetailViewModel();
 
-            var dialog = new AddEditBookWindow
-            {
-                DataContext = vm
-            };
+        //private void RaiseCanExecuteChanged()
+        //{
+        //    (EditBookCommand as AsyncDelegateCommand)?.RaiseCanExecuteChanged();
+        //    (DeleteBookCommand as AsyncDelegateCommand)?.RaiseCanExecuteChanged();
+        //}
 
-            if (dialog.ShowDialog() == true)
-            {
-                await LoadBookRowsAsync();
-            }
-        }
 
         public async Task LoadBookRowsAsync()
         {

@@ -8,7 +8,7 @@ The application is used to administer a bookstore’s inventory, books and autho
 The application allows a user to:
 <br>
 - View stock levels per store<br>
-- Update inventory quantities asynchronously<br>
+- Update inventory quantities<br>
 - Manage books (create, edit, delete)<br>
 - Assign multiple authors to books<br>
 - Manage authors and prevent deletion if books exist

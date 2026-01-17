@@ -48,6 +48,18 @@ Connect to: (localdb)\MSSQLLocalDB<br>
 Database name: Bookstore_EF
 
 <br>
+<h1>Tools & Technologies</h1>
+- C#<br>
+- .NET<br>
+- WPF (desktop application)<br>
+- Entity Framework Core (Code First, Migrations)<br>
+- SQL Server LocalDB<br>
+- MVVM architectural pattern <br>
+- Asynchronous programming (async/await)<br>
+- Visual Studio<br>
+- Git & GitHub<br>
+
+<br>
 <h2>Inventory view</h2>
 <img width="1067" height="546" alt="bokhandel_lagersaldo" src="https://github.com/user-attachments/assets/34a53149-2d7d-4772-871a-6707d0ef4b19" />
 <br>

@@ -117,13 +117,14 @@ namespace BookstoreApp.ViewModel
 
             if (blockingStockLevels.Any())
             {
-                var storeIds = blockingStockLevels
+
+                var stores = blockingStockLevels
                     .Where(sl => sl.Store != null)
-                    .Select(sl => sl.Store.StoreId)
+                    .Select(sl => sl.Store.Street)
                     .Distinct();
 
                 MessageBox.Show(
-                    $"Boken kan inte tas bort eftersom den finns i lager eller är beställd i följande butik(er):\n\n{string.Join(", ", storeIds)}",
+                    $"Boken kan inte tas bort eftersom den finns i lager eller är beställd i följande butik(er):\n\n{string.Join(", ", stores)}",
                     "Kan inte ta bort bok",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
@@ -158,13 +159,6 @@ namespace BookstoreApp.ViewModel
         {
             return SelectedBookRow != null;
         }
-
-
-        //private void RaiseCanExecuteChanged()
-        //{
-        //    (EditBookCommand as AsyncDelegateCommand)?.RaiseCanExecuteChanged();
-        //    (DeleteBookCommand as AsyncDelegateCommand)?.RaiseCanExecuteChanged();
-        //}
 
 
         public async Task LoadBookRowsAsync()

@@ -52,7 +52,7 @@ Database name: Bookstore_EF
 - C#<br>
 - .NET<br>
 - WPF (desktop application)<br>
-- Entity Framework Core (Code First, Migrations)<br>
+- Entity Framework Core <br>
 - SQL Server LocalDB<br>
 - MVVM architectural pattern <br>
 - Asynchronous programming (async/await)<br>

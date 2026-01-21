@@ -190,6 +190,7 @@ namespace BookstoreApp.ViewModel
             book.Title = Title;
             book.SalesPrice = SalesPrice;
             book.Weight = Weight;
+            book.Language = Language;
             book.ReleaseDate = ReleaseDate;
             book.NumberOfPages = NumberOfPages;
             book.CategoryId = Category.CategoryId;

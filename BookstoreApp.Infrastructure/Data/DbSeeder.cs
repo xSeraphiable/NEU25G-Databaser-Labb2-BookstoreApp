@@ -75,6 +75,8 @@ namespace BookstoreApp.Infrastructure.Data
                     Title = "Bröderna Lejonhjärta",
                     SalesPrice = 179,
                     Category = children,
+                    Language = "Svenska",
+                    NumberOfPages = 248,
                     ReleaseDate = new DateOnly(1973, 1, 1)
                 };
                 book1.Authors.Add(astrid);
@@ -85,6 +87,8 @@ namespace BookstoreApp.Infrastructure.Data
                     Title = "Röda rummet",
                     SalesPrice = 149,
                     Category = classic,
+                    Language = "Svenska",
+                    NumberOfPages = 111,
                     ReleaseDate = new DateOnly(1879, 1, 1)
                 };
                 book2.Authors.Add(strindberg);
@@ -95,6 +99,8 @@ namespace BookstoreApp.Infrastructure.Data
                     Title = "The Hobbit",
                     SalesPrice = 199,
                     Category = fiction,
+                    Language = "Engelska",
+                    NumberOfPages = 400,
                     ReleaseDate = new DateOnly(1937, 9, 21)
                 };
                 book3.Authors.Add(tolkien);
@@ -104,41 +110,41 @@ namespace BookstoreApp.Infrastructure.Data
             }
 
             // STOCK LEVELS
-            if (!db.StockLevels.Any())
-            {
-                var store1 = await db.Stores.FirstAsync(s => s.City == "Stockholm");
-                var store2 = await db.Stores.FirstAsync(s => s.City == "Göteborg");
+            //if (!db.StockLevels.Any())
+            //{
+            //    var store1 = await db.Stores.FirstAsync(s => s.City == "Stockholm");
+            //    var store2 = await db.Stores.FirstAsync(s => s.City == "Göteborg");
 
-                var book1 = await db.Books.FirstAsync(b => b.Title == "Bröderna Lejonhjärta");
-                var book2 = await db.Books.FirstAsync(b => b.Title == "Röda rummet");
-                var book3 = await db.Books.FirstAsync(b => b.Title == "The Hobbit");
+            //    var book1 = await db.Books.FirstAsync(b => b.Title == "Bröderna Lejonhjärta");
+            //    var book2 = await db.Books.FirstAsync(b => b.Title == "Röda rummet");
+            //    var book3 = await db.Books.FirstAsync(b => b.Title == "The Hobbit");
 
-                db.StockLevels.AddRange(
-                    new StockLevel
-                    {
-                        StoreId = store1.StoreId,
-                        Isbn = book1.Isbn,
-                        Quantity = 5,
-                        QuantityOrdered = 1
-                    },
-                    new StockLevel
-                    {
-                        StoreId = store1.StoreId,
-                        Isbn = book2.Isbn,
-                        Quantity = 2,
-                        QuantityOrdered = 0
-                    },
-                    new StockLevel
-                    {
-                        StoreId = store2.StoreId,
-                        Isbn = book3.Isbn,
-                        Quantity = 0,
-                        QuantityOrdered = 4
-                    }
-                );
+            //    db.StockLevels.AddRange(
+            //        new StockLevel
+            //        {
+            //            StoreId = store1.StoreId,
+            //            Isbn = book1.Isbn,
+            //            Quantity = 5,
+            //            QuantityOrdered = 1
+            //        },
+            //        new StockLevel
+            //        {
+            //            StoreId = store1.StoreId,
+            //            Isbn = book2.Isbn,
+            //            Quantity = 2,
+            //            QuantityOrdered = 0
+            //        },
+            //        new StockLevel
+            //        {
+            //            StoreId = store2.StoreId,
+            //            Isbn = book3.Isbn,
+            //            Quantity = 0,
+            //            QuantityOrdered = 4
+            //        }
+            //    );
 
-                await db.SaveChangesAsync();
-            }
+            //    await db.SaveChangesAsync();
+            //}
         }
     }
 

@@ -18,7 +18,7 @@ The application allows a user to:
 <h3>Requirements</h3> 
 <ul> 
  <li>Visual Studio 2022</li> 
- <li>SQL Server LocalDB (installed automatically via Visual Studio – Data storage and processing workload)
+ <li>SQL Server LocalDB (installed via Visual Studio Installer – "Data storage and processing" workload)
 </li> </ul> <h3>Step-by-step</h3> <ol> 
  <li>Clone the repository and open the solution in Visual Studio.</li>
  <li>In Solution Explorer, right-click the project <b>BookstoreApp.Infrastructure</b> and select
@@ -45,7 +45,7 @@ SQL Server Management Studio<br>
 SQL Server Object Explorer in Visual Studio
 
 Connect to: (localdb)\MSSQLLocalDB<br>
-Database name: Bookstore_EF
+Database name: Bookstore_EF *(or the name you set it to)*
 
 <br>
 <h1>Tools & Technologies</h1>

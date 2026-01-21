@@ -148,7 +148,7 @@
                                     Binding="{Binding Title}"
                                     IsReadOnly="True"/>
                 <DataGridTextColumn Header="Författare" 
-                                    Binding="{Binding Author}"
+                                    Binding="{Binding Authors}"
                                     IsReadOnly="True"/>
                 <DataGridTextColumn 
                                     Binding="{Binding Quantity,
